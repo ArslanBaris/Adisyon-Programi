@@ -9,6 +9,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AdisyonProgramı">
+        <activity android:name=".MenuTransactActivity"></activity>
+        <activity android:name=".TableTransactActivity" />
+        <activity android:name=".UserTransactActivity" />
+        <activity android:name=".AdminActivity" />
+        <activity
+            android:name=".SignUpActivity"
+            android:label="Sign Up" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
