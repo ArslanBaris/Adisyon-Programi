@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/category_recyclerView"
+        android:layout_width="201dp"
+        android:layout_height="600dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="100dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/product_recyclerView"
+        android:layout_width="201dp"
+        android:layout_height="600dp"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@+id/category_recyclerView"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="100dp" />
+
+    <Button
+        android:id="@+id/btnMenuAdd"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="35dp"
+        android:layout_marginLeft="35dp"
+        android:layout_marginBottom="30dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginEnd="15dp"
+        android:onClick="FragmentMenuAdd"
+        android:text="Add" />
+
+    <Button
+        android:id="@+id/btnMenuUpdate"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"
+        android:layout_marginEnd="157dp"
+        android:layout_marginRight="157dp"
+        android:layout_marginBottom="30dp"
+        android:onClick="FragmentMenuUpdate"
+        android:text="Update" />
+
+    <Button
+        android:id="@+id/btnMenuDelete"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="35dp"
+        android:layout_marginRight="35dp"
+        android:layout_marginBottom="30dp"
+        android:onClick="FragmentMenuDelete"
+        android:text="Delete" />
+
+
+
+
+</RelativeLayout>
+
