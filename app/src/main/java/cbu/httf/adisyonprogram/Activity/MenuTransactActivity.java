@@ -1,15 +1,19 @@
-package cbu.httf.adisyonprogram;
+package cbu.httf.adisyonprogram.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
+
+import cbu.httf.adisyonprogram.R;
 
 public class MenuTransactActivity extends AppCompatActivity {
 
-    private LinearLayout menuInfo;
+    private Button btnAddMenu,btnUpdateMenu,btnDeleteMenu;
+    //private TableAddFragment tableAddFragment;
+
+
     private EditText editTextCategory;
     private EditText editTextProductName;
     private EditText editTextUnitPrice;
@@ -22,13 +26,10 @@ public class MenuTransactActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_transact);
 
-        editTextCategory=(EditText)findViewById(R.id.editTextTblName);
-        editTextProductName=(EditText)findViewById(R.id.editTextTblNumber);
-        editTextUnitPrice=(EditText)findViewById(R.id.editTextTblNumber);
-        menuInfo=(LinearLayout)findViewById(R.id.menuInfo);
+        //editTextCategory=(EditText)findViewById(R.id.edit);
+        //editTextProductName=(EditText)findViewById(R.id.editTextTblNumber);
+       // editTextUnitPrice=(EditText)findViewById(R.id.editTextTblNumber);
+
     }
 
-    public void ChangeInfoTbl(View v){
-        menuInfo.setVisibility(View.VISIBLE);
-    }
 }

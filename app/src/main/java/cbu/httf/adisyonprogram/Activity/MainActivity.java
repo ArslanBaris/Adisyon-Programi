@@ -1,4 +1,4 @@
-package cbu.httf.adisyonprogram;
+package cbu.httf.adisyonprogram.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
+import cbu.httf.adisyonprogram.R;
 
 public class MainActivity extends AppCompatActivity {
     @Override
@@ -17,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this,UserTransactActivity.class);
+                Intent i = new Intent(MainActivity.this,SignInActivity.class);
                 i.putExtra("string_key","Button 1");
                 startActivity(i);
             }
