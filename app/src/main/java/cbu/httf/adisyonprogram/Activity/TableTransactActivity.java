@@ -1,19 +1,29 @@
 package cbu.httf.adisyonprogram.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
+import cbu.httf.adisyonprogram.Adapters.TableAdapter;
 import cbu.httf.adisyonprogram.Fragment.Table.TableAddFragment;
 import cbu.httf.adisyonprogram.Fragment.Table.TableUpdateFragment;
+import cbu.httf.adisyonprogram.Network.Service;
 import cbu.httf.adisyonprogram.R;
+import cbu.httf.adisyonprogram.data.model.TablesModel;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class TableTransactActivity extends AppCompatActivity  {
@@ -22,47 +32,70 @@ public class TableTransactActivity extends AppCompatActivity  {
     private TableAddFragment tableAddFragment;
     private TableUpdateFragment tableUpdateFragment;
 
+    private RecyclerView recyclerView;
 
-
-
-    private EditText editTextTableNumber;
-
-    private int tableNumber;
     private String takenUserName;
     public   static String takentoken;
 
 
-
     private void init(){
-        btnAddTable=findViewById(R.id.btnTableAdd);
-        btnUpdateTable=findViewById(R.id.btnTableUpdate);
-        btnDeleteTable=findViewById(R.id.btnTableDelete);
+        btnAddTable=(Button)findViewById(R.id.btnTableAdd);
+        btnUpdateTable=(Button)findViewById(R.id.btnTableUpdate);
+        btnDeleteTable=(Button)findViewById(R.id.btnTableDelete);
 
         tableAddFragment =  new TableAddFragment(takentoken);
         tableUpdateFragment =  new TableUpdateFragment(takentoken);
+
+        recyclerView=(RecyclerView)findViewById(R.id.table_recyclerView);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        getSupportActionBar().setTitle("Table Transact");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_table_transact);
 
-
-
-        //editTextTableName=(EditText)findViewById(R.id.editTextTblName);
-        //editTextTableNumber=(EditText)findViewById(R.id.editTextTblNumber);
-        //tableInfo=(LinearLayout)findViewById(R.id.tableInfo);
-
         Intent takenIntent = getIntent();
-        takenUserName = takenIntent.getStringExtra("userName"); // SignIn den username alınıp buraya gönderilecek
+        takenUserName = takenIntent.getStringExtra("userName");
         takentoken=takenIntent.getStringExtra("token");
-
 
         init();
 
+        getTables();
+
+
     }
 
+    public void initTables(ArrayList<TablesModel> tablesModels){
 
+        LinearLayoutManager linearLayoutManager= new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(linearLayoutManager);
+        TableAdapter tableAdapter = new TableAdapter(tablesModels,getApplicationContext());
+        recyclerView.setAdapter(tableAdapter);
+    }
+
+    public void getTables(){
+        Call<List<TablesModel>> tablesModelCall = Service.getServiceApi().getTables(takentoken);
+        tablesModelCall.enqueue(new Callback<List<TablesModel>>() {
+            @Override
+            public void onResponse(Call<List<TablesModel>> call, Response<List<TablesModel>> response) {
+                if(response.isSuccessful()){
+                    ArrayList<TablesModel> tablesModels = new ArrayList<>();
+                    tablesModels =(ArrayList<TablesModel>) response.body();
+
+                    initTables(tablesModels);
+
+                }else{
+                    Toast.makeText(TableTransactActivity.this, "Request failed. "+response.code() , Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<TablesModel>> call, Throwable t) {
+                Toast.makeText(TableTransactActivity.this, "Request failed. "+t.getMessage() , Toast.LENGTH_LONG).show();
+            }
+        });
+    }
 
     public void FragmentTableAdd(View v){
         tableAddFragment.show(getSupportFragmentManager(),"ADD TABLE");
@@ -73,43 +106,7 @@ public class TableTransactActivity extends AppCompatActivity  {
     }
 
     public void FragmentTableDelete(View v){
-        //tableAddFragment.show(getSupportFragmentManager(),"DELETE TABLE");
+        tableAddFragment.show(getSupportFragmentManager(),"DELETE TABLE");
     }
 
-
-    /*public void UpdateTable(View v){
-        tableInfo.setVisibility(View.VISIBLE);
-        Toast.makeText(TableTransactActivity.this,"token: "+takentoken,Toast.LENGTH_LONG).show();
-    }*/
-
-   /* public void btnTableSave(View v){
-        //
-        tableNumber=Integer.valueOf(editTextTableNumber.getText().toString());
-        TablesModel tablesModel = new TablesModel();
-        tablesModel.setAd(tableName);
-        tablesModel.setID(tableNumber);
-        Call<TablesModel> tablesModelCall = Service.getServiceApi().putTable(takentoken,tablesModel);
-        //Call<TablesModel> tablesModelCall = Service.getServiceApi().putTable(takentoken,tableNumber,tableName);
-        tablesModelCall.enqueue(new Callback<TablesModel>() {
-            @Override
-            public void onResponse(Call<TablesModel> call, Response<TablesModel> response) {
-                if(response.isSuccessful()){
-                    Toast.makeText(TableTransactActivity.this,"Request Successful.: "+takentoken,Toast.LENGTH_LONG).show();
-                    //Toast.makeText(TableTransactActivity.this,"Login Successful",Toast.LENGTH_LONG).show();
-                    //Toast.makeText(TableTransactActivity.this,"token: "+takentoken,Toast.LENGTH_LONG).show();
-                }else{
-                    Toast.makeText(TableTransactActivity.this,"Request failed.: "+takentoken,Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<TablesModel> call, Throwable t) {
-
-            }
-        });
-
-
-    }
-
-    */
 }
