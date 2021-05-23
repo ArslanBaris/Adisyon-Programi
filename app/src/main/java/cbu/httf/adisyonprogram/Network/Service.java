@@ -21,7 +21,7 @@ public class Service {
         if (retrofit == null) {
             retrofit = new Retrofit.Builder()
                     .baseUrl(Cons.BASE_URL)
-                   // .addConverterFactory(ScalarsConverterFactory.create())
+                    //.addConverterFactory(ScalarsConverterFactory.create())
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
         }
