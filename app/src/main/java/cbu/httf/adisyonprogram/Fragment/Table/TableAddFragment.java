@@ -16,8 +16,13 @@ import androidx.annotation.Nullable;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import cbu.httf.adisyonprogram.Activity.TableTransactActivity;
 import cbu.httf.adisyonprogram.Network.Service;
 import cbu.httf.adisyonprogram.R;
+import cbu.httf.adisyonprogram.data.model.ResultModel;
 import cbu.httf.adisyonprogram.data.model.TablesModel;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -28,7 +33,9 @@ public class TableAddFragment extends BottomSheetDialogFragment {
     private ImageView imgClose;
     private Button postTable;
     private EditText editTextTableName;
+    private EditText editTextTableNumber;
     private String tableName;
+    private int tableNumber;
     private String token;
 
 
@@ -48,6 +55,7 @@ public class TableAddFragment extends BottomSheetDialogFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         editTextTableName=(EditText)view.findViewById(R.id.editTextAddTableName);
+        editTextTableNumber=(EditText)view.findViewById(R.id.editTextAddTableNumber);
 
         imgClose = view.findViewById(R.id.add_table_imgClose);
 
@@ -63,34 +71,36 @@ public class TableAddFragment extends BottomSheetDialogFragment {
         postTable.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!TextUtils.isEmpty(editTextTableName.getText().toString())) {
+                if (!TextUtils.isEmpty(editTextTableName.getText().toString()) || !TextUtils.isEmpty(editTextTableNumber.getText().toString())) {
                     tableName = editTextTableName.getText().toString();
+                    tableNumber = Integer.parseInt(editTextTableNumber.getText().toString());
 
-                    Call<TablesModel> tablesModelCall = Service.getServiceApi().postTable(token, tableName);
-                    tablesModelCall.enqueue(new Callback<TablesModel>() {
+                    Call<ResultModel> tableModelCall = Service.getServiceApi().postTable(token, tableName,tableNumber);
+
+                    tableModelCall.enqueue(new Callback<ResultModel>() {
                         @Override
-                        public void onResponse(Call<TablesModel> call, Response<TablesModel> response) {
+                        public void onResponse(Call<ResultModel> call, Response<ResultModel> response) {
                             if (response.isSuccessful()) {
-                                Toast.makeText(getContext(), "Request Successful.: " + token, Toast.LENGTH_LONG).show();
+                                Toast.makeText(getContext(), "Request Successful." , Toast.LENGTH_LONG).show();
+                                ((TableTransactActivity)getActivity()).recreate();
                                 dismiss();
 
                             } else {
-                                Toast.makeText(getContext(), "Request failed.: " + token, Toast.LENGTH_LONG).show();
+                                Toast.makeText(getContext(), "Request failed. ("+response.code()+")" , Toast.LENGTH_LONG).show();
                             }
 
                         }
 
                         @Override
-                        public void onFailure(Call<TablesModel> call, Throwable t) {
+                        public void onFailure(Call<ResultModel> call, Throwable t) {
+                            Toast.makeText(getContext(), "Failure: "+t.getMessage(), Toast.LENGTH_LONG).show();
 
                         }
                     });
-
-
+                }else{
+                    Toast.makeText(getContext(), "Boş alanları doldurunuz.", Toast.LENGTH_LONG).show();
                 }
             }
         });
-
     }
-
 }
