@@ -46,6 +46,15 @@ public class UserModel {
         UserTypeName = userTypeName;
     }
 
+    public UserModel(int ID, String userName, String name, String surname, String eMail, String userTypeName) {
+        this.ID = ID;
+        this.userName = userName;
+        this.name = name;
+        this.surname = surname;
+        this.eMail = eMail;
+        UserTypeName = userTypeName;
+    }
+
     public int getID() {
         return ID;
     }
