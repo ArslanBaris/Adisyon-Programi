@@ -18,12 +18,12 @@ public class MenuModel {
 
     @SerializedName("Fiyat")
     @Expose
-    private String Fiyat;
+    private float Fiyat;
 
     public MenuModel() {
     }
 
-    public MenuModel(int ID, String kategori, String ad, String fiyat) {
+    public MenuModel(int ID, String kategori, String ad, float fiyat) {
         this.ID = ID;
         Kategori = kategori;
         Ad = ad;
@@ -54,11 +54,11 @@ public class MenuModel {
         Ad = ad;
     }
 
-    public String getFiyat() {
+    public float getFiyat() {
         return Fiyat;
     }
 
-    public void setFiyat(String fiyat) {
+    public void setFiyat(float fiyat) {
         Fiyat = fiyat;
     }
 }
