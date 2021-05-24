@@ -78,7 +78,7 @@ public interface ServiceApi {
     Call<ResultModel> postMenu(@Header("token") String token,
                                @Field("Kategori") String kategori,
                                @Field("Ad") String ad,
-                               @Field("Fiyat") String fiyat);
+                               @Field("Fiyat") float fiyat);
 
 
 
