@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="cbu.httf.adisyonprogram">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,14 +11,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AdisyonProgramı">
-        <activity android:name=".MenuTransactActivity"></activity>
-        <activity android:name=".TableTransactActivity" />
-        <activity android:name=".UserTransactActivity" />
-        <activity android:name=".AdminActivity" />
+        <activity android:name=".Activity.MenuTransactActivity" />
+        <activity android:name=".Activity.TableTransactActivity" />
+        <activity android:name=".Activity.UserTransactActivity" />
+        <activity android:name=".Activity.AdminActivity" />
         <activity
-            android:name=".SignUpActivity"
+            android:name=".Activity.SignUpActivity"
             android:label="Sign Up" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".Activity.SignInActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
