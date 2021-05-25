@@ -2,6 +2,7 @@ package cbu.httf.adisyonprogram.Network;
 
 import java.util.List;
 
+import cbu.httf.adisyonprogram.data.model.CategoryModel;
 import cbu.httf.adisyonprogram.data.model.LoginRequest;
 import cbu.httf.adisyonprogram.data.model.MenuModel;
 import cbu.httf.adisyonprogram.data.model.ResultModel;
@@ -39,6 +40,10 @@ public interface ServiceApi {
 
     @GET("menu")
     Call<List<MenuModel>> getMenu(@Header("token") String token);
+                                  //@Query("Kategori") int categoryId);
+
+    @GET("category")
+    Call<List<CategoryModel>> getCategories(@Header("token") String token);
 
 
     //PUT Requests
@@ -76,7 +81,7 @@ public interface ServiceApi {
     @FormUrlEncoded
     @POST("menu")
     Call<ResultModel> postMenu(@Header("token") String token,
-                               @Field("Kategori") String kategori,
+                               @Field("Kategori") int kategori,
                                @Field("Ad") String ad,
                                @Field("Fiyat") float fiyat);
 
