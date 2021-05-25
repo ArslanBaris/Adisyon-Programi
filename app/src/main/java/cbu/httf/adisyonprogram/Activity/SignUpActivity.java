@@ -70,12 +70,16 @@ public class SignUpActivity extends AppCompatActivity {
         boolean user = false;
         deneme=String.valueOf(admin);
 
-        Toast.makeText(SignUpActivity.this, deneme,Toast.LENGTH_LONG).show();
 
         if (TextUtils.isEmpty(userName)||TextUtils.isEmpty(name)||TextUtils.isEmpty(surName)||
-                TextUtils.isEmpty(eMail)||TextUtils.isEmpty(firstPassword)||TextUtils.isEmpty(secondPassword)|| (admin==false)|| (user==false)){
+                TextUtils.isEmpty(eMail)||TextUtils.isEmpty(firstPassword)||
+                TextUtils.isEmpty(secondPassword)||
+                (!rbAdmin.isChecked()&& (!rbUser.isChecked()))){
 
-            Toast.makeText(SignUpActivity.this, "Boş değerleri doldurum",Toast.LENGTH_LONG).show();
+           // if((!rbAdmin.isChecked())|| (!rbUser.isChecked())) {
+
+                Toast.makeText(SignUpActivity.this, "Boş değerleri doldurum", Toast.LENGTH_LONG).show();
+            //}
         }
         else
             Toast.makeText(SignUpActivity.this, "tamam",Toast.LENGTH_LONG).show();
