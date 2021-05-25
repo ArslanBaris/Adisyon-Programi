@@ -36,6 +36,9 @@ public class SignInActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
 
+        getSupportActionBar().setTitle("Sign In");
+
+
         editTextLoginEmail=(EditText)findViewById(R.id.editTextLoginEmail);
         editTextLoginPassword=(EditText)findViewById(R.id.editTextLoginPassword);
         textView=(TextView)findViewById(R.id.textView);
@@ -78,9 +81,8 @@ public class SignInActivity extends AppCompatActivity {
                    if(loginResponse.getResult().get("UserTypeName").equals("Root")||loginResponse.getResult().get("UserTypeName").equals("Administrator")){
 
                        startActivity(new Intent(SignInActivity.this,AdminActivity.class).putExtra("token",token).
-                               putExtra("userName",loginResponse.getResult().get("userName")).
-                               putExtra("name",loginResponse.getResult().get("name")).
-                               putExtra("surname",loginResponse.getResult().get("surname")));
+                               putExtra("userName",loginResponse.getResult().get("userName")));
+
                    }else if(loginResponse.getResult().get("UserTypeName").equals("User")) {
                        Toast.makeText(SignInActivity.this,"Main Activity",Toast.LENGTH_LONG).show();
                    }
