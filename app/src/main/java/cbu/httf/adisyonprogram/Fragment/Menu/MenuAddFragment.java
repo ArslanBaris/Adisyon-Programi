@@ -59,9 +59,11 @@ public class MenuAddFragment extends BottomSheetDialogFragment {
         return view;
     }
 
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
+
         spinnerAddCategory=(Spinner)view.findViewById(R.id.spinnerAddMenu);
         editTextProductName=(EditText)view.findViewById(R.id.editTextAddProductName);
         editTextUnitPrice=(EditText)view.findViewById(R.id.editTextAddUnitPrice);
@@ -80,6 +82,8 @@ public class MenuAddFragment extends BottomSheetDialogFragment {
             }
         });
 
+
+
         postMenu = (Button)view.findViewById(R.id.postMenu);
 
         postMenu.setOnClickListener(new View.OnClickListener() {
@@ -89,19 +93,7 @@ public class MenuAddFragment extends BottomSheetDialogFragment {
                         !TextUtils.isEmpty(editTextUnitPrice.getText().toString())||
                         spinnerAddCategory.getSelectedItem()!=null){
 
-                    spinnerAddCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                        @Override
-                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                            category=Integer.parseInt(spinnerAddCategory.getSelectedItem().toString());
-                            Toast.makeText(getContext(), "id: "+category , Toast.LENGTH_LONG).show();
-                        }
-
-                        @Override
-                        public void onNothingSelected(AdapterView<?> parent) {
-
-                        }
-                    });
-
+                    category=Integer.parseInt(spinnerAddCategory.getSelectedItem().toString());
                     productName= editTextProductName.getText().toString();
                     unitPrice= Float.parseFloat(editTextUnitPrice.getText().toString());
 
@@ -111,7 +103,6 @@ public class MenuAddFragment extends BottomSheetDialogFragment {
                         public void onResponse(Call<ResultModel> call, Response<ResultModel> response) {
                             if (response.isSuccessful()) {
                                 Toast.makeText(getContext(), "Request Successful." , Toast.LENGTH_LONG).show();
-
                                 ((MenuTransactActivity)getActivity()).recreate();
                                 dismiss();
 
