@@ -5,15 +5,19 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+
+import java.util.ArrayList;
 
 import cbu.httf.adisyonprogram.Activity.MenuTransactActivity;
 import cbu.httf.adisyonprogram.Activity.TableTransactActivity;
@@ -30,18 +34,22 @@ public class MenuUpdateFragment extends BottomSheetDialogFragment {
 
     private ImageView imgClose;
     private Button putMenu;
+    private Spinner spinnerUpdateCategory;
     private EditText editTextID;
-    private EditText editTextCategory;
     private EditText editTextProductName;
     private EditText editTextUnitPrice;
 
     private int id;
-    private String category;
+    private int category;
     private String productName;
     private float unitPrice;
     private String token;
 
-    public MenuUpdateFragment(String token) {
+    ArrayList<Integer> categories;
+    ArrayAdapter<Integer> arrayAdapter;
+
+    public MenuUpdateFragment(String token,  ArrayList<Integer> categories) {
+        this.categories=categories;
         this.token=token;
     }
 
@@ -57,9 +65,13 @@ public class MenuUpdateFragment extends BottomSheetDialogFragment {
         super.onViewCreated(view, savedInstanceState);
 
         editTextID=(EditText)view.findViewById(R.id.editTextUpdateMenuID);
-        editTextCategory=(EditText)view.findViewById(R.id.editTextUpdateCategory);
+        spinnerUpdateCategory=(Spinner)view.findViewById(R.id.spinnerUpdateMenu);
         editTextProductName=(EditText)view.findViewById(R.id.editTextUpdateProductName);
         editTextUnitPrice=(EditText)view.findViewById(R.id.editTextUpdateUnitPrice);
+
+        arrayAdapter = new ArrayAdapter(this.getActivity(), android.R.layout.simple_spinner_item,categories);
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerUpdateCategory.setAdapter(arrayAdapter);
 
         imgClose = view.findViewById(R.id.update_menu_imgClose);
 
@@ -76,12 +88,12 @@ public class MenuUpdateFragment extends BottomSheetDialogFragment {
             @Override
             public void onClick(View v) {
                 if (!TextUtils.isEmpty(editTextID.getText().toString())||
-                        !TextUtils.isEmpty(editTextCategory.getText().toString())||
                         !TextUtils.isEmpty(editTextProductName.getText().toString())||
-                        !TextUtils.isEmpty(editTextUnitPrice.getText().toString())){
+                        !TextUtils.isEmpty(editTextUnitPrice.getText().toString())||
+                        spinnerUpdateCategory.getSelectedItem()!=null){
 
                     id= Integer.parseInt(editTextID.getText().toString());
-                    category= editTextCategory.getText().toString();
+                    category=Integer.parseInt(spinnerUpdateCategory.getSelectedItem().toString());
                     productName= editTextProductName.getText().toString();
                     unitPrice= Float.parseFloat(editTextUnitPrice.getText().toString());
 
