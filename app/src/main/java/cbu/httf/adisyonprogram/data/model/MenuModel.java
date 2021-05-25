@@ -10,7 +10,7 @@ public class MenuModel {
 
     @SerializedName("Kategori")
     @Expose
-    private String Kategori;
+    private int Kategori;
 
     @SerializedName("Ad")
     @Expose
@@ -23,7 +23,7 @@ public class MenuModel {
     public MenuModel() {
     }
 
-    public MenuModel(int ID, String kategori, String ad, float fiyat) {
+    public MenuModel(int ID, int kategori, String ad, float fiyat) {
         this.ID = ID;
         Kategori = kategori;
         Ad = ad;
@@ -38,11 +38,11 @@ public class MenuModel {
         this.ID = ID;
     }
 
-    public String getKategori() {
+    public int getKategori() {
         return Kategori;
     }
 
-    public void setKategori(String kategori) {
+    public void setKategori(int kategori) {
         Kategori = kategori;
     }
 
