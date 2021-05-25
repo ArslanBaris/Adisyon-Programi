@@ -1,13 +1,17 @@
 package cbu.httf.adisyonprogram.Fragment.Menu;
 
+import android.app.NotificationManager;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -15,10 +19,14 @@ import androidx.annotation.Nullable;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import cbu.httf.adisyonprogram.Activity.MenuTransactActivity;
 import cbu.httf.adisyonprogram.Activity.TableTransactActivity;
 import cbu.httf.adisyonprogram.Network.Service;
 import cbu.httf.adisyonprogram.R;
+import cbu.httf.adisyonprogram.data.model.CategoryModel;
 import cbu.httf.adisyonprogram.data.model.ResultModel;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -28,16 +36,19 @@ public class MenuAddFragment extends BottomSheetDialogFragment {
 
     private ImageView imgClose;
     private Button postMenu;
-    private EditText editTextCategory;
+    private Spinner spinnerAddCategory;
     private EditText editTextProductName;
     private EditText editTextUnitPrice;
-    private String category;
+    private int category;
     private String productName;
     private float unitPrice;
     private String token;
+    ArrayList<Integer> categories;
 
-    public MenuAddFragment(String token) {
+    ArrayAdapter<Integer> arrayAdapter;
 
+    public MenuAddFragment(String token,  ArrayList<Integer> categories) {
+        this.categories=categories;
         this.token=token;
     }
 
@@ -51,9 +62,14 @@ public class MenuAddFragment extends BottomSheetDialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
-        editTextCategory=(EditText)view.findViewById(R.id.editTextAddCategory);
+        spinnerAddCategory=(Spinner)view.findViewById(R.id.spinnerAddMenu);
         editTextProductName=(EditText)view.findViewById(R.id.editTextAddProductName);
         editTextUnitPrice=(EditText)view.findViewById(R.id.editTextAddUnitPrice);
+
+        arrayAdapter = new ArrayAdapter(this.getActivity(), android.R.layout.simple_spinner_item,categories);
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerAddCategory.setAdapter(arrayAdapter);
+
 
         imgClose = view.findViewById(R.id.add_menu_imgClose);
 
@@ -64,16 +80,28 @@ public class MenuAddFragment extends BottomSheetDialogFragment {
             }
         });
 
-        postMenu = (Button)view.findViewById(R.id.postTable);
+        postMenu = (Button)view.findViewById(R.id.postMenu);
 
         postMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!TextUtils.isEmpty(editTextCategory.getText().toString())||
-                        !TextUtils.isEmpty(editTextProductName.getText().toString())||
-                        !TextUtils.isEmpty(editTextUnitPrice.getText().toString())){
+                if (!TextUtils.isEmpty(editTextProductName.getText().toString())||
+                        !TextUtils.isEmpty(editTextUnitPrice.getText().toString())||
+                        spinnerAddCategory.getSelectedItem()!=null){
 
-                    category= editTextCategory.getText().toString();
+                    spinnerAddCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            category=Integer.parseInt(spinnerAddCategory.getSelectedItem().toString());
+                            Toast.makeText(getContext(), "id: "+category , Toast.LENGTH_LONG).show();
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+
+                        }
+                    });
+
                     productName= editTextProductName.getText().toString();
                     unitPrice= Float.parseFloat(editTextUnitPrice.getText().toString());
 
@@ -83,6 +111,7 @@ public class MenuAddFragment extends BottomSheetDialogFragment {
                         public void onResponse(Call<ResultModel> call, Response<ResultModel> response) {
                             if (response.isSuccessful()) {
                                 Toast.makeText(getContext(), "Request Successful." , Toast.LENGTH_LONG).show();
+
                                 ((MenuTransactActivity)getActivity()).recreate();
                                 dismiss();
 
