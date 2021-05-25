@@ -20,9 +20,11 @@ public class AdminActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin);
 
+        getSupportActionBar().setTitle("Admin Page");
+
         txtUser=(TextView)findViewById(R.id.txtAdminUserName);
         Intent takenIntent = getIntent();
-        takenUserName = takenIntent.getStringExtra("userName"); // SignIn den username alınıp buraya gönderilecek
+        takenUserName = takenIntent.getStringExtra("userName");
         txtUser.setText(takenUserName);
         takentoken=takenIntent.getStringExtra("token");
 
