@@ -58,6 +58,6 @@
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
         android:onClick="btnGoToSignUp"
-        android:text="Sign In" />
+        android:text="Sign Up" />
 
 </LinearLayout>

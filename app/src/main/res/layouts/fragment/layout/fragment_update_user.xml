@@ -8,10 +8,10 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:textColor="@color/black"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="70dp"
         android:textSize="20sp"
         android:fontFamily="serif"
-        android:textStyle="italic"
+        android:textStyle="bold|italic"
         android:text="UPDATE USER"/>
 
     <ImageView
@@ -26,12 +26,12 @@
         android:layout_marginTop="10dp"/>
 
     <EditText
-        android:id="@+id/editTextUpdateID"
+        android:id="@+id/editTextUpdateUserID"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="140dp"
         android:layout_marginRight="20dp"
         android:ems="10"
         android:hint="ID"
@@ -43,7 +43,7 @@
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/editTextUpdateID"
+        android:layout_below="@+id/editTextUpdateUserID"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="25dp"
         android:layout_marginRight="20dp"

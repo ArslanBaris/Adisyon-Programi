@@ -8,13 +8,14 @@
     android:layout_height="match_parent">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/add_table_recyclerView"
+        android:id="@+id/table_recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="5dp"
+        android:layout_above="@+id/btnTableUpdate"
         android:layout_marginLeft="5dp"
-        android:layout_marginBottom="100dp"/>
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="25dp" />
 
     <Button
         android:id="@+id/btnTableAdd"
@@ -25,9 +26,9 @@
         android:layout_alignParentBottom="true"
         android:layout_marginStart="35dp"
         android:layout_marginLeft="35dp"
-        android:layout_marginBottom="30dp"
-        android:layout_marginRight="15dp"
         android:layout_marginEnd="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="30dp"
         android:onClick="FragmentTableAdd"
         android:text="Add" />
 
@@ -55,8 +56,6 @@
         android:layout_marginBottom="30dp"
         android:onClick="FragmentTableDelete"
         android:text="Delete" />
-
-
 
 
 </RelativeLayout>

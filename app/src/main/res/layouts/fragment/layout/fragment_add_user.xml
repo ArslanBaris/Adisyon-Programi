@@ -8,10 +8,10 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:textColor="@color/black"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="70dp"
         android:fontFamily="serif"
         android:textSize="20sp"
-        android:textStyle="italic"
+        android:textStyle="bold|italic"
         android:text="ADD USER"/>
 
     <ImageView
@@ -31,7 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="140dp"
         android:layout_marginRight="20dp"
         android:ems="10"
         android:hint="Username"
@@ -111,7 +111,8 @@
         android:layout_below="@+id/addRadio"
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="30dp"
-        android:layout_marginTop="34dp"
+        android:layout_marginTop="40dp"
         android:layout_marginRight="30dp"
+        android:layout_marginBottom="120dp"
         android:text="Save" />
 </RelativeLayout>

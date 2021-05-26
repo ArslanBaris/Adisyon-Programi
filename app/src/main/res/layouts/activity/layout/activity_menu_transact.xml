@@ -20,7 +20,6 @@
         android:id="@+id/product_recyclerView"
         android:layout_width="201dp"
         android:layout_height="600dp"
-        android:layout_marginLeft="5dp"
         android:layout_toRightOf="@+id/category_recyclerView"
         android:layout_marginTop="10dp"
         android:layout_marginRight="5dp"
