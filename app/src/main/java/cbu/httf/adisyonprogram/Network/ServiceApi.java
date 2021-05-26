@@ -34,13 +34,11 @@ public interface ServiceApi {
     @GET("user")
     Call<UserModel> getUser(@Header("token") String token);
 
-
     @GET("masalar")
     Call<List<TablesModel>> getTables(@Header("token") String token);
 
     @GET("menu")
     Call<List<MenuModel>> getMenu(@Header("token") String token);
-                                  //@Query("Kategori") int categoryId);
 
     @GET("category")
     Call<List<CategoryModel>> getCategories(@Header("token") String token);
@@ -84,6 +82,12 @@ public interface ServiceApi {
                                @Field("Kategori") int kategori,
                                @Field("Ad") String ad,
                                @Field("Fiyat") float fiyat);
+
+    //DELETE Requests
+    @FormUrlEncoded
+    @DELETE("menu")
+    Call<ResultModel> deleteMenu(@Header("token") String token,
+                                 @Field("ID") int ID);
 
 
 
