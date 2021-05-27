@@ -11,6 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AdisyonProgramı">
+        <activity android:name=".Activity.TableItemActivity"></activity>
+        <activity android:name=".Activity.MenuActivity" />
         <activity android:name=".Activity.MenuTransactActivity" />
         <activity android:name=".Activity.TableTransactActivity" />
         <activity android:name=".Activity.UserTransactActivity" />
