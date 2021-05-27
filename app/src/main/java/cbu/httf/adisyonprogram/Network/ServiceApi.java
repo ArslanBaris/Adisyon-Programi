@@ -10,6 +10,7 @@ import cbu.httf.adisyonprogram.data.model.TablesModel;
 import cbu.httf.adisyonprogram.data.model.LoginResponse;
 import cbu.httf.adisyonprogram.data.model.UserModel;
 import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.Field;
@@ -19,6 +20,7 @@ import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface ServiceApi {
@@ -58,6 +60,11 @@ public interface ServiceApi {
     Call<ResultModel> putMenu(@Header("token") String token,
                               @Body MenuModel menuModel);
 
+    @PUT("category")
+    Call<ResultModel> putCategory(@Header("token") String token,
+                              @Body CategoryModel categoryModel);
+
+
 
     //POST Requests
 
@@ -83,11 +90,30 @@ public interface ServiceApi {
                                @Field("Ad") String ad,
                                @Field("Fiyat") float fiyat);
 
-    //DELETE Requests
     @FormUrlEncoded
-    @DELETE("menu")
+    @POST("category")
+    Call<ResultModel> postCategory(@Header("token") String token,
+                                   @Field("CategoryName") String categoryName);
+
+    //DELETE Requests
+
+    @DELETE("user/delete/{ID}")
+    Call<ResultModel> deleteUser(@Header("token") String token,
+                                 @Path("ID") int ID);
+
+    @DELETE("masalar/delete/{ID}")
+    Call<ResultModel> deleteTable(@Header("token") String token,
+                                 @Path("ID") int ID);
+
+    @DELETE("menu/delete/{ID}")
     Call<ResultModel> deleteMenu(@Header("token") String token,
-                                 @Field("ID") int ID);
+                                 @Path("ID") int ID);
+
+    @DELETE("category/delete/{ID}")
+    Call<ResultModel> deleteCategory(@Header("token") String token,
+                                 @Path("ID") int ID);
+
+
 
 
 
