@@ -1,7 +1,6 @@
 package cbu.httf.adisyonprogram.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.view.menu.MenuAdapter;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -9,7 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
+
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -17,17 +16,15 @@ import java.util.List;
 
 import cbu.httf.adisyonprogram.Adapters.CategoryAdapter;
 import cbu.httf.adisyonprogram.Adapters.ProductAdapter;
-import cbu.httf.adisyonprogram.Adapters.TableAdapter;
+import cbu.httf.adisyonprogram.Fragment.Category.CategoryAddFragment;
+import cbu.httf.adisyonprogram.Fragment.Category.CategoryUpdateFragment;
 import cbu.httf.adisyonprogram.Fragment.Menu.MenuAddFragment;
 import cbu.httf.adisyonprogram.Fragment.Menu.MenuUpdateFragment;
-import cbu.httf.adisyonprogram.Fragment.Table.TableAddFragment;
-import cbu.httf.adisyonprogram.Fragment.Table.TableUpdateFragment;
 import cbu.httf.adisyonprogram.Network.Service;
 import cbu.httf.adisyonprogram.R;
 import cbu.httf.adisyonprogram.data.model.CategoryModel;
 import cbu.httf.adisyonprogram.data.model.MenuModel;
 import cbu.httf.adisyonprogram.data.model.ResultModel;
-import cbu.httf.adisyonprogram.data.model.TablesModel;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -35,8 +32,11 @@ import retrofit2.Response;
 public class MenuTransactActivity extends AppCompatActivity {
 
     private Button btnAddMenu,btnUpdateMenu,btnDeleteMenu;
+
     private MenuAddFragment menuAddFragment;
     private MenuUpdateFragment menuUpdateFragment;
+    private CategoryAddFragment categoryAddFragment;
+    private CategoryUpdateFragment categoryUpdateFragment;
 
     private String takenUserName;
     public   static String takentoken;
@@ -45,7 +45,7 @@ public class MenuTransactActivity extends AppCompatActivity {
     private RecyclerView recyclerViewProduct;
 
     private int categoryId;
-    private static int productId;
+    private  int productId;
 
     static ArrayList<Integer> categories;
 
@@ -77,6 +77,8 @@ public class MenuTransactActivity extends AppCompatActivity {
 
         menuAddFragment =  new MenuAddFragment(takentoken,categories);
         menuUpdateFragment =  new MenuUpdateFragment(takentoken,categories);
+        categoryAddFragment =  new CategoryAddFragment(takentoken);
+        categoryUpdateFragment =  new CategoryUpdateFragment(takentoken);
     }
 
     public void initCategories(ArrayList<CategoryModel> categoryModels){
@@ -90,7 +92,7 @@ public class MenuTransactActivity extends AppCompatActivity {
             @Override
             public void onCategoryItemClick(CategoryModel categoryModel, int position) {
                 categoryId=categoryModel.getCategoryId();
-                //Toast.makeText(MenuTransactActivity.this, "C ID: "+categoryId , Toast.LENGTH_LONG).show();
+                Toast.makeText(MenuTransactActivity.this, "C ID: "+categoryId , Toast.LENGTH_LONG).show();
                 getProducts(categoryId);
             }
         });
@@ -168,10 +170,40 @@ public class MenuTransactActivity extends AppCompatActivity {
             @Override
             public void onProductItemClick(MenuModel menuModel, int position) {
                 productId=menuModel.getID();
+                Toast.makeText(MenuTransactActivity.this, "p: "+productId , Toast.LENGTH_LONG).show();
             }
         });
     }
 
+
+    public void FragmentCategoryAdd(View v){
+        categoryAddFragment.show(getSupportFragmentManager(),"ADD CATEGORY");
+    }
+
+    public void FragmentCategoryUpdate(View v){
+        categoryUpdateFragment.show(getSupportFragmentManager(),"UPDATE CATEGORY");
+    }
+
+    public void CategoryDelete(View v){
+
+        Call<ResultModel> deleteCall = Service.getServiceApi().deleteCategory(takentoken,categoryId);
+        deleteCall.enqueue(new Callback<ResultModel>() {
+            @Override
+            public void onResponse(Call<ResultModel> call, Response<ResultModel> response) {
+                if(response.isSuccessful()){
+                    Toast.makeText(MenuTransactActivity.this,"Transaction is successful.", Toast.LENGTH_LONG).show();
+                    recreate();
+                }else{
+                    Toast.makeText(MenuTransactActivity.this, "Request failed. "+response.code() , Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResultModel> call, Throwable t) {
+                Toast.makeText(MenuTransactActivity.this, "Failure. "+t.getMessage() , Toast.LENGTH_LONG).show();
+            }
+        });
+    }
 
     public void FragmentMenuAdd(View v){
         menuAddFragment.show(getSupportFragmentManager(),"ADD MENU");
@@ -181,14 +213,14 @@ public class MenuTransactActivity extends AppCompatActivity {
         menuUpdateFragment.show(getSupportFragmentManager(),"UPDATE MENU");
     }
 
-    public void FragmentMenuDelete(View v){
-        //tableAddFragment.show(getSupportFragmentManager(),"DELETE TABLE");
+    public void MenuDelete(View v){
+
         Call<ResultModel> deleteCall = Service.getServiceApi().deleteMenu(takentoken,productId);
         deleteCall.enqueue(new Callback<ResultModel>() {
             @Override
             public void onResponse(Call<ResultModel> call, Response<ResultModel> response) {
                 if(response.isSuccessful()){
-                    Toast.makeText(MenuTransactActivity.this,"Transaction is successful.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(MenuTransactActivity.this,"Transaction is successful."+response.body().getResult(), Toast.LENGTH_LONG).show();
                     recreate();
                 }else{
                     Toast.makeText(MenuTransactActivity.this, "Request failed. "+response.code() , Toast.LENGTH_LONG).show();
