@@ -54,8 +54,9 @@ public class CategoryUpdateFragment extends BottomSheetDialogFragment {
 
         editTextCategoryID=(EditText)view.findViewById(R.id.editTextUpdateCategoryId);
         editTextCategoryName=(EditText)view.findViewById(R.id.editTextAddCategoryName);
-        Toast.makeText(getContext(), "categorYID "+categoryId , Toast.LENGTH_LONG).show();
-        editTextCategoryID.setText(String.valueOf(categoryId));
+
+        if(categoryId!=0)
+            editTextCategoryID.setText(String.valueOf(categoryId));
 
         imgClose = view.findViewById(R.id.update_category_imgClose);
 
