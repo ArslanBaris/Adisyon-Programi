@@ -1,7 +1,10 @@
 package cbu.httf.adisyonprogram.Fragment.Table;
 
+import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -39,11 +42,56 @@ public class TableAddFragment extends BottomSheetDialogFragment {
     private int tableNumber;
     private String token;
 
+    public  static String action="cbu.httf.adisyonprogram.Fragment.Table.intent";
 
     public TableAddFragment(String token) {
 
         this.token=token;
     }
+
+    private  void init(View view){
+        editTextTableName=(EditText)view.findViewById(R.id.editTextAddTableName);
+        editTextTableNumber=(EditText)view.findViewById(R.id.editTextAddTableNumber);
+        imgClose = view.findViewById(R.id.add_table_imgClose);
+        postTable = (Button)view.findViewById(R.id.postTable);
+
+
+
+
+
+    }
+
+    private  void Notification(){
+
+        Intent intent= new Intent(getContext(),TableTransactActivity.class);
+        PendingIntent replyPendingIntent =
+                PendingIntent.getActivity(getContext(),0,intent,0);
+
+        NotificationManager notificationManager = (NotificationManager)getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+
+        //Notification.Builder builder= new Notification.Builder(getContext());
+        Notification builder= new Notification.Builder(getContext())
+                .setContentTitle("Bildirim")
+                .setContentText("Açıklama")
+                .setSmallIcon(R.drawable.ic_persons)
+                .setTicker("Bildirim geliyorrrr")
+                .setAutoCancel(true)
+                .setContentIntent(replyPendingIntent)
+                .build();
+        /*builder.setContentTitle("Bildirim");
+        builder.setContentText("İlk Bildirim");
+        builder.setSmallIcon(R.drawable.ic_persons);
+        builder.setAutoCancel(true);
+        builder.setTicker("Bildirim geliyorrrr");*/
+
+
+        //builder.setContentIntent(replyPendingIntent);
+
+        //Notification notification = builder.build();
+        notificationManager.notify(0,builder);
+
+    }
+
 
     @Nullable
     @Override
@@ -55,10 +103,8 @@ public class TableAddFragment extends BottomSheetDialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        editTextTableName=(EditText)view.findViewById(R.id.editTextAddTableName);
-        editTextTableNumber=(EditText)view.findViewById(R.id.editTextAddTableNumber);
 
-        imgClose = view.findViewById(R.id.add_table_imgClose);
+        init(view);
 
         imgClose.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,12 +113,11 @@ public class TableAddFragment extends BottomSheetDialogFragment {
             }
         });
 
-        postTable = (Button)view.findViewById(R.id.postTable);
 
         postTable.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!TextUtils.isEmpty(editTextTableName.getText().toString()) || !TextUtils.isEmpty(editTextTableNumber.getText().toString())) {
+                if (!TextUtils.isEmpty(editTextTableName.getText().toString()) && !TextUtils.isEmpty(editTextTableNumber.getText().toString())) {
                     tableName = editTextTableName.getText().toString();
                     tableNumber = Integer.parseInt(editTextTableNumber.getText().toString());
 
@@ -83,6 +128,7 @@ public class TableAddFragment extends BottomSheetDialogFragment {
                         public void onResponse(Call<ResultModel> call, Response<ResultModel> response) {
                             if (response.isSuccessful()) {
                                 Toast.makeText(getContext(), "Request Successful." , Toast.LENGTH_LONG).show();
+                                Notification();
                                 ((TableTransactActivity)getActivity()).recreate();
                                 dismiss();
 
