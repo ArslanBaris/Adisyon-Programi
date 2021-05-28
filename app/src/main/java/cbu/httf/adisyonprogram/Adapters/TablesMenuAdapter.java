@@ -24,7 +24,8 @@ public class TablesMenuAdapter extends ArrayAdapter<TablesModel> {
     private ArrayList<TablesModel> mTableList;
     private Context mContext;
     private ImageView imageView;
-    private TextView textView;
+    private TextView txtName;
+    private TextView txtNumber;
 
     public TablesMenuAdapter(ArrayList<TablesModel> mTableList,Context mContext) {
         super(mContext,R.layout.item_table_menu,mTableList);
@@ -40,9 +41,10 @@ public class TablesMenuAdapter extends ArrayAdapter<TablesModel> {
 
         if(view!=null){
             imageView=view.findViewById(R.id.table_menu_image);
-            textView=view.findViewById(R.id.txt_menu_tableName);
-
-            textView.setText(mTableList.get(position).getAd());
+            txtName=view.findViewById(R.id.txt_menu_tableName);
+            txtNumber=view.findViewById(R.id.txt_menu_tableNumber);
+            txtName.setText(mTableList.get(position).getAd());
+            txtNumber.setText(mTableList.get(position).getTableNo());
             //imageView.setBackgroundResource(R.drawable.ic_table);
         }
         return view;
