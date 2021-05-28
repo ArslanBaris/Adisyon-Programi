@@ -1,17 +1,23 @@
 package cbu.httf.adisyonprogram.Adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+import cbu.httf.adisyonprogram.Activity.MenuTransactActivity;
 import cbu.httf.adisyonprogram.R;
 import cbu.httf.adisyonprogram.data.model.CategoryModel;
 import cbu.httf.adisyonprogram.data.model.MenuModel;
@@ -23,6 +29,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.Products
     private OnProductItemClickListener listener;
     private int categoryId;
 
+    private int selected_position=-1;
 
     public ProductAdapter(ArrayList<MenuModel> mMenuList, Context mContext,int categoryId) {
         this.categoryId=categoryId;
@@ -51,6 +58,12 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.Products
         holder.txtProductName.setText(String.valueOf(mMenuList.get(position).getAd()));
         holder.txtMenuPrice.setText(String.valueOf(mMenuList.get(position).getFiyat()));
 
+        if (selected_position == position) {
+            holder.itemView.setBackgroundColor(Color.parseColor("#A1A1A1"));
+        }else{
+            holder.itemView.setBackgroundColor(Color.parseColor("#ffffff"));
+        }
+
     }
 
     @Override
@@ -64,7 +77,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.Products
         TextView txtMenuPrice;
         ImageView imageView;
 
-
         public ProductsHolder(@NonNull View itemView) {
             super(itemView);
             txtProductName=itemView.findViewById(R.id.product_item_txtName);
@@ -74,11 +86,20 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.Products
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int position = getAdapterPosition();
+
+                    if(listener != null){
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION){
+                            listener.onProductItemClick(mMenuList.get(position),position);
+                            selected_position = position;
+                            notifyDataSetChanged();
+                        }
+                    }
+                    /*int position = getAdapterPosition();
 
                     if(listener!= null && position!=RecyclerView.NO_POSITION){
                         listener.onProductItemClick(mMenuList.get(position),position);
-                    }
+                    }*/
                 }
             });
         }
