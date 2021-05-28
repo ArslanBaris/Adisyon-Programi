@@ -25,12 +25,6 @@ import retrofit2.Response;
 
 public class SignInActivity extends AppCompatActivity {
 
-    public void test(View view){
-        Intent intent = new Intent(getApplicationContext(), TableItemActivity.class);
-        startActivity(intent);
-        this.finish();
-    }
-
     private EditText editTextLoginEmail;
     private EditText editTextLoginPassword;
     private TextView textView;
@@ -89,8 +83,11 @@ public class SignInActivity extends AppCompatActivity {
                        startActivity(new Intent(SignInActivity.this,AdminActivity.class).putExtra("token",token).
                                putExtra("userName",loginResponse.getResult().get("userName")));
 
-                   }else if(loginResponse.getResult().get("UserTypeName").equals("User")) {
-                       Toast.makeText(SignInActivity.this,"Main Activity",Toast.LENGTH_LONG).show();
+                   }else if(loginResponse.getResult().get("UserTypeName").equals("Manager")) {
+
+                       startActivity(new Intent(SignInActivity.this,TablesActivity.class).putExtra("token",token).
+                               putExtra("userName",loginResponse.getResult().get("userName")));
+
                    }
 
                }else{
