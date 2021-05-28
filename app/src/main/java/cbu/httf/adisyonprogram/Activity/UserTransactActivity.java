@@ -96,7 +96,9 @@ public class UserTransactActivity extends AppCompatActivity {
     }
 
     public void FragmentUserAdd(View v){
-        userAddFragment.show(getSupportFragmentManager(),"ADD USER");
+        //userAddFragment.show(getSupportFragmentManager(),"ADD USER");
+        startActivity(new Intent(UserTransactActivity.this,SignUpActivity.class).putExtra("token",takentoken));
+
     }
 
     public void FragmentUserUpdate(View v){
