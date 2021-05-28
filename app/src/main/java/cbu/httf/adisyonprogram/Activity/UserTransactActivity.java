@@ -6,28 +6,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import cbu.httf.adisyonprogram.Adapters.TableAdapter;
 import cbu.httf.adisyonprogram.Adapters.UserAdapter;
-import cbu.httf.adisyonprogram.Fragment.Table.TableAddFragment;
-import cbu.httf.adisyonprogram.Fragment.Table.TableUpdateFragment;
 import cbu.httf.adisyonprogram.Fragment.User.UserAddFragment;
 import cbu.httf.adisyonprogram.Fragment.User.UserUpdateFragment;
 import cbu.httf.adisyonprogram.Network.Service;
-import cbu.httf.adisyonprogram.Network.ServiceApi;
 import cbu.httf.adisyonprogram.R;
-import cbu.httf.adisyonprogram.data.model.TablesModel;
 import cbu.httf.adisyonprogram.data.model.UserModel;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -106,14 +96,16 @@ public class UserTransactActivity extends AppCompatActivity {
     }
 
     public void FragmentUserAdd(View v){
-        userAddFragment.show(getSupportFragmentManager(),"ADD TABLE");
+        //userAddFragment.show(getSupportFragmentManager(),"ADD USER");
+        startActivity(new Intent(UserTransactActivity.this,SignUpActivity.class).putExtra("token",takentoken));
+
     }
 
     public void FragmentUserUpdate(View v){
-        userUpdateFragment.show(getSupportFragmentManager(),"UPDATE TABLE");
+        userUpdateFragment.show(getSupportFragmentManager(),"UPDATE USER");
     }
 
-    public void FragmentUserDelete(View v){
+    public void UserDelete(View v){
         //tableAddFragment.show(getSupportFragmentManager(),"DELETE TABLE");
     }
 

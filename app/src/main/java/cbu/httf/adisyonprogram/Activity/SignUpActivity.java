@@ -4,27 +4,56 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
 import android.widget.RadioButton;
 import android.widget.Toast;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import cbu.httf.adisyonprogram.Network.Service;
 import cbu.httf.adisyonprogram.R;
+import cbu.httf.adisyonprogram.data.model.ResultModel;
 
 public class SignUpActivity extends AppCompatActivity {
 
-    private EditText userName;
-    private EditText name;
-    private EditText surname;
-    private EditText eMail;
-    private EditText firstPassword;
-    private EditText secondPassword;
+    private EditText editTextUserName;
+    private EditText editTextName;
+    private EditText editTextSurname;
+    private EditText editTextEmail;
+    private EditText editTextfirstPassword;
+    private EditText editTextsecondPassword;
+
     private RadioButton rbAdmin;
     private  RadioButton rbUser;
 
+    private String takentoken;
 
+    private String userName;
+    private String name;
+    private String surname;
+    private String eMail;
+    private String password;
+    private String userTypeName;
+
+
+
+    public  void init(){
+        editTextUserName=(EditText)findViewById(R.id.etUsername);
+        editTextName=(EditText)findViewById(R.id.etName);
+        editTextSurname=(EditText)findViewById(R.id.etSurname);
+        editTextEmail=(EditText)findViewById(R.id.etEmail);
+        editTextfirstPassword=(EditText)findViewById(R.id.etStPasword);
+        editTextsecondPassword=(EditText)findViewById(R.id.etNdPasword);
+        rbAdmin=(RadioButton)findViewById(R.id.rbAdmin);
+        rbUser=(RadioButton)findViewById(R.id.rbUser);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,60 +61,63 @@ public class SignUpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_up);
 
         Intent takenIntent = getIntent();
-
-        userName=(EditText)findViewById(R.id.etUsername);
-        name=(EditText)findViewById(R.id.etName);
-        surname=(EditText)findViewById(R.id.etSurname);
-        eMail=(EditText)findViewById(R.id.etEmail);
-        firstPassword=(EditText)findViewById(R.id.etStPasword);
-        secondPassword=(EditText)findViewById(R.id.etNdPasword);
-        rbAdmin=(RadioButton)findViewById(R.id.rbAdmin);
-        rbUser=(RadioButton)findViewById(R.id.rbUser);
-
+        takentoken=takenIntent.getStringExtra("token");
+        Toast.makeText(SignUpActivity.this, "Request Successful."+takentoken , Toast.LENGTH_LONG).show();
+        init();
 
         ((Button)findViewById(R.id.btnSignUp)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(     !TextUtils.isEmpty(editTextUserName.getText().toString())&&
+                        !TextUtils.isEmpty(editTextName.getText().toString())&&
+                        !TextUtils.isEmpty(editTextSurname.getText().toString())&&
+                        !TextUtils.isEmpty(editTextEmail.getText().toString())&&
+                        !TextUtils.isEmpty(editTextfirstPassword.getText().toString())&&
+                        !TextUtils.isEmpty(editTextsecondPassword.getText().toString())&&
+                        (!rbAdmin.isChecked() || (!rbUser.isChecked()))){
 
-            isEmpty(userName,name,surname,eMail,firstPassword,secondPassword,rbAdmin,rbUser);
+                        if(editTextsecondPassword.getText().toString().equals(editTextfirstPassword.getText().toString())) {
 
+                            userName = editTextUserName.getText().toString();
+                            name = editTextName.getText().toString();
+                            surname = editTextSurname.getText().toString();
+                            eMail = editTextEmail.getText().toString();
+                            password=editTextfirstPassword.getText().toString();
 
-                //Intent i = new Intent(SignUpActivity.this,SignIn.class);
-                //startActivity(i);
+                           if (rbAdmin.isChecked()){
+                               userTypeName=rbAdmin.getText().toString();
+                           }else{
+                                userTypeName=rbUser.getText().toString();
+                           }
+
+                            Call<ResultModel> addUserCall = Service.getServiceApi().postUser(takentoken,userName,name,surname,eMail,password,userTypeName);
+                            addUserCall.enqueue(new Callback<ResultModel>() {
+                            @Override
+                            public void onResponse(Call<ResultModel> call, Response<ResultModel> response) {
+                                if (response.isSuccessful()) {
+                                    Toast.makeText(SignUpActivity.this, "Request Successful." , Toast.LENGTH_LONG).show();
+
+                                    startActivity(new Intent(SignUpActivity.this,UserTransactActivity.class).putExtra("token",takentoken));
+
+                                }else {
+                                    Toast.makeText(SignUpActivity.this, "Request failed. ("+response.code()+")" , Toast.LENGTH_LONG).show();
+                                }
+                            }
+                            @Override
+                            public void onFailure(Call<ResultModel> call, Throwable t) {
+                                Toast.makeText(SignUpActivity.this, "Failure: "+t.getMessage(), Toast.LENGTH_LONG).show();
+                            }
+                        });
+                        }else{
+                        Toast.makeText(SignUpActivity.this, "Eşleşmeyen şifre.",Toast.LENGTH_LONG).show();
+                        }
+
+                }else {
+                    Toast.makeText(SignUpActivity.this, "Boş alanları doldurunuz.", Toast.LENGTH_LONG).show();
+                }
             }
         });
-
     }
 
-    public void isEmpty(EditText etUserName,EditText etName,EditText etSurname,EditText etEmail,EditText etFirstPassword,
-                        EditText etSecondPassword,RadioButton rbAdmin,RadioButton rbUser){
-        String deneme;
-        String userName = etUserName.getText().toString();
-        String name = etName.getText().toString();
-        String surName = etSurname.getText().toString();
-        String eMail = etEmail.getText().toString();
-        String firstPassword=etFirstPassword.getText().toString();
-        String secondPassword=etSecondPassword.getText().toString();
-        boolean admin = false;
-        boolean user = false;
-        deneme=String.valueOf(admin);
-
-
-        if (TextUtils.isEmpty(userName)||TextUtils.isEmpty(name)||TextUtils.isEmpty(surName)||
-                TextUtils.isEmpty(eMail)||TextUtils.isEmpty(firstPassword)||
-                TextUtils.isEmpty(secondPassword)||
-                (!rbAdmin.isChecked()&& (!rbUser.isChecked()))){
-
-           // if((!rbAdmin.isChecked())|| (!rbUser.isChecked())) {
-
-                Toast.makeText(SignUpActivity.this, "Boş değerleri doldurum", Toast.LENGTH_LONG).show();
-            //}
-        }
-        else
-            Toast.makeText(SignUpActivity.this, "tamam",Toast.LENGTH_LONG).show();
-
-
-
-    }
 
 }

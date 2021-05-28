@@ -36,8 +36,9 @@ public class CategoryUpdateFragment extends BottomSheetDialogFragment {
 
     private String token;
 
-    public CategoryUpdateFragment(String token) {
+    public CategoryUpdateFragment(String token,int categoryId) {
         this.token=token;
+        this.categoryId=categoryId;
     }
 
     @Nullable
@@ -53,6 +54,8 @@ public class CategoryUpdateFragment extends BottomSheetDialogFragment {
 
         editTextCategoryID=(EditText)view.findViewById(R.id.editTextUpdateCategoryId);
         editTextCategoryName=(EditText)view.findViewById(R.id.editTextAddCategoryName);
+        Toast.makeText(getContext(), "categorYID "+categoryId , Toast.LENGTH_LONG).show();
+        editTextCategoryID.setText(String.valueOf(categoryId));
 
         imgClose = view.findViewById(R.id.update_category_imgClose);
 

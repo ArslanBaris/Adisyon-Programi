@@ -39,7 +39,7 @@ public class MenuUpdateFragment extends BottomSheetDialogFragment {
     private EditText editTextProductName;
     private EditText editTextUnitPrice;
 
-    private int id;
+    private int productId;
     private int category;
     private String productName;
     private float unitPrice;
@@ -48,9 +48,10 @@ public class MenuUpdateFragment extends BottomSheetDialogFragment {
     ArrayList<Integer> categories;
     ArrayAdapter<Integer> arrayAdapter;
 
-    public MenuUpdateFragment(String token,  ArrayList<Integer> categories) {
+    public MenuUpdateFragment(String token,  ArrayList<Integer> categories,int productId) {
         this.categories=categories;
         this.token=token;
+        this.productId=productId;
     }
 
     @Nullable
@@ -73,6 +74,10 @@ public class MenuUpdateFragment extends BottomSheetDialogFragment {
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerUpdateCategory.setAdapter(arrayAdapter);
 
+        Toast.makeText(getContext(), "productId önce "+String.valueOf(productId), Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(), "token "+token, Toast.LENGTH_LONG).show();
+        //editTextID.setText(Integer.parseInt(productId));
+        //Toast.makeText(getContext(), "productId sonra"+editTextID.getText().toString(), Toast.LENGTH_LONG).show();
         imgClose = view.findViewById(R.id.update_menu_imgClose);
 
         imgClose.setOnClickListener(new View.OnClickListener() {
@@ -92,12 +97,12 @@ public class MenuUpdateFragment extends BottomSheetDialogFragment {
                         !TextUtils.isEmpty(editTextUnitPrice.getText().toString())||
                         spinnerUpdateCategory.getSelectedItem()!=null){
 
-                    id= Integer.parseInt(editTextID.getText().toString());
+                    productId= Integer.parseInt(editTextID.getText().toString());
                     category=Integer.parseInt(spinnerUpdateCategory.getSelectedItem().toString());
                     productName= editTextProductName.getText().toString();
                     unitPrice= Float.parseFloat(editTextUnitPrice.getText().toString());
 
-                    MenuModel menuModel = new MenuModel(id,category,productName,unitPrice);
+                    MenuModel menuModel = new MenuModel(productId,category,productName,unitPrice);
 
                     Call<ResultModel> resultModelCall = Service.getServiceApi().putMenu(token, menuModel);
                     resultModelCall.enqueue(new Callback<ResultModel>() {

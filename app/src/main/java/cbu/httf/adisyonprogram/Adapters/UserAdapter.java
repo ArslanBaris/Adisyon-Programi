@@ -1,6 +1,7 @@
 package cbu.httf.adisyonprogram.Adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UsersHolder>  
     private Context mContext;
     private ArrayList<UserModel> mUserList;
 
+    private int row_index=-1;
 
     public UserAdapter(ArrayList<UserModel> mUserList,Context mContext) {
         this.mUserList=mUserList;
@@ -34,10 +36,29 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UsersHolder>  
 
     @Override
     public void onBindViewHolder(@NonNull UsersHolder holder, int position) {
+
+
         holder.txtUserId.setText(String.valueOf(mUserList.get(position).getID()));
         holder.txtUserName.setText(String.valueOf(mUserList.get(position).getUserName()));
+        holder.txtUserType.setText("("+String.valueOf(mUserList.get(position).getUserTypeName())+")");
         holder.txtName.setText(mUserList.get(position).getName());
         holder.txtSurname.setText(mUserList.get(position).getSurname());
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                row_index = position;
+
+                notifyDataSetChanged();
+            }
+        });
+
+        if (row_index == position) {
+            holder.itemView.setBackgroundColor(Color.parseColor("#A1A1A1"));
+        }else{
+            holder.itemView.setBackgroundColor(Color.parseColor("#ffffff"));
+        }
     }
 
     @Override
@@ -48,6 +69,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UsersHolder>  
     public class UsersHolder extends RecyclerView.ViewHolder{
         TextView txtUserId;
         TextView txtUserName;
+        TextView txtUserType;
         TextView txtName;
         TextView txtSurname;
 
@@ -55,6 +77,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UsersHolder>  
             super(itemView);
             txtUserId=itemView.findViewById(R.id.user_item_txtUserId);
             txtUserName= itemView.findViewById(R.id.user_item_txtUserName);
+            txtUserType= itemView.findViewById(R.id.user_item_txtUserType);
             txtName= itemView.findViewById(R.id.user_item_txtName);
             txtSurname= itemView.findViewById(R.id.user_item_txtSurname);
         }

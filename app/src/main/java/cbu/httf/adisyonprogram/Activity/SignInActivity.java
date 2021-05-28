@@ -45,9 +45,9 @@ public class SignInActivity extends AppCompatActivity {
 
     }
 
-    public void btnGoToSignUp(View v){
+   /* public void btnGoToSignUp(View v){
         startActivity(new Intent(SignInActivity.this,SignUpActivity.class));
-    }
+    }*/
     public void btnSignIn(View v){
 
         eMail = editTextLoginEmail.getText().toString();
