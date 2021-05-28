@@ -25,12 +25,6 @@ import retrofit2.Response;
 
 public class SignInActivity extends AppCompatActivity {
 
-    public void test(View view){
-        Intent intent = new Intent(getApplicationContext(), TableItemActivity.class);
-        startActivity(intent);
-        this.finish();
-    }
-
     private EditText editTextLoginEmail;
     private EditText editTextLoginPassword;
     private TextView textView;
