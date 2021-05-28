@@ -89,8 +89,8 @@ public class MenuAddFragment extends BottomSheetDialogFragment {
         postMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!TextUtils.isEmpty(editTextProductName.getText().toString())||
-                        !TextUtils.isEmpty(editTextUnitPrice.getText().toString())||
+                if (!TextUtils.isEmpty(editTextProductName.getText().toString())&&
+                        !TextUtils.isEmpty(editTextUnitPrice.getText().toString())&&
                         spinnerAddCategory.getSelectedItem()!=null){
 
                     category=Integer.parseInt(spinnerAddCategory.getSelectedItem().toString());
