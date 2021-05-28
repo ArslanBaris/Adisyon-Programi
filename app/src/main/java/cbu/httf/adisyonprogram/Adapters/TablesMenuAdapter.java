@@ -44,7 +44,7 @@ public class TablesMenuAdapter extends ArrayAdapter<TablesModel> {
             txtName=view.findViewById(R.id.txt_menu_tableName);
             txtNumber=view.findViewById(R.id.txt_menu_tableNumber);
             txtName.setText(mTableList.get(position).getAd());
-            txtNumber.setText(mTableList.get(position).getTableNo());
+            txtNumber.setText(String.valueOf(mTableList.get(position).getTableNo()));
             //imageView.setBackgroundResource(R.drawable.ic_table);
         }
         return view;
