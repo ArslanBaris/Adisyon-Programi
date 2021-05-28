@@ -42,8 +42,8 @@ public class MenuTransactActivity extends AppCompatActivity {
     private String takenUserName;
 
     public static String takentoken;
-    public  int categoryId;
-    public  int productId;
+    public  int categoryId=0;
+    public  int productId=0;
 
     private RecyclerView recyclerViewCategory;
     private RecyclerView recyclerViewProduct;
@@ -59,6 +59,7 @@ public class MenuTransactActivity extends AppCompatActivity {
 
         categories=new ArrayList<>();
 
+        categoryUpdateFragment =  new CategoryUpdateFragment(takentoken,categoryId);
         recyclerViewCategory=(RecyclerView)findViewById(R.id.category_recyclerView);
         recyclerViewProduct=(RecyclerView)findViewById(R.id.product_recyclerView);
     }
@@ -78,14 +79,8 @@ public class MenuTransactActivity extends AppCompatActivity {
 
         getCategories();
 
-
-
-        int givenProductId=productId;
-        int givenCategoryId=categoryId;
-        Log.d("productId",String.valueOf(productId));
-        Log.d("productId",String.valueOf(categoryId));
         menuAddFragment =  new MenuAddFragment(takentoken,categories);
-
+        menuUpdateFragment =  new MenuUpdateFragment(takentoken,categories,productId);
         categoryAddFragment =  new CategoryAddFragment(takentoken);
 
     }
@@ -101,7 +96,6 @@ public class MenuTransactActivity extends AppCompatActivity {
             @Override
             public void onCategoryItemClick(CategoryModel categoryModel, int position) {
                 categoryId=categoryModel.getCategoryId();
-                Toast.makeText(MenuTransactActivity.this, "init c: "+categoryId , Toast.LENGTH_LONG).show();
                 categoryUpdateFragment =  new CategoryUpdateFragment(takentoken,categoryId);
                 getProducts();
             }
