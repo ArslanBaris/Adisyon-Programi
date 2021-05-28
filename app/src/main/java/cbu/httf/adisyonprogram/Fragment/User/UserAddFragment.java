@@ -16,7 +16,6 @@ import androidx.annotation.Nullable;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
-import cbu.httf.adisyonprogram.Activity.TableTransactActivity;
 import cbu.httf.adisyonprogram.Activity.UserTransactActivity;
 import cbu.httf.adisyonprogram.Network.Service;
 import cbu.httf.adisyonprogram.R;
@@ -24,6 +23,7 @@ import cbu.httf.adisyonprogram.data.model.ResultModel;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
 
 public class UserAddFragment extends BottomSheetDialogFragment {
 
@@ -33,6 +33,7 @@ public class UserAddFragment extends BottomSheetDialogFragment {
     private EditText editTextName;
     private EditText editTextSurname;
     private EditText editTextEmail;
+    private EditText editTextPassword;
 
     private RadioButton rbAdmin;
     private  RadioButton rbUser;
@@ -41,6 +42,7 @@ public class UserAddFragment extends BottomSheetDialogFragment {
     private String name;
     private String surname;
     private String eMail;
+    private String password;
     private String userTypeName;
     private String token;
 
@@ -62,6 +64,7 @@ public class UserAddFragment extends BottomSheetDialogFragment {
         editTextName=(EditText)view.findViewById(R.id.editTextAddName);
         editTextSurname=(EditText)view.findViewById(R.id.editTextAddSurname);
         editTextEmail=(EditText)view.findViewById(R.id.editTextAddEmail);
+        editTextPassword=(EditText)view.findViewById(R.id.editTextAddPassword);
         rbAdmin=(RadioButton)view.findViewById(R.id.rbAddAdmin);
         rbUser=(RadioButton)view.findViewById(R.id.rbAddUser);
 
@@ -83,12 +86,14 @@ public class UserAddFragment extends BottomSheetDialogFragment {
                         !TextUtils.isEmpty(editTextName.getText().toString())||
                         !TextUtils.isEmpty(editTextSurname.getText().toString())||
                         !TextUtils.isEmpty(editTextEmail.getText().toString())||
+                        !TextUtils.isEmpty(editTextPassword.getText().toString())||
                         (!rbAdmin.isChecked()&& (!rbUser.isChecked()))){
 
                     userName = editTextUserName.getText().toString();
                     name = editTextName.getText().toString();
                     surname = editTextSurname.getText().toString();
                     eMail = editTextEmail.getText().toString();
+                    password= editTextPassword.getText().toString();
 
                     if (rbAdmin.isChecked()){
                         userTypeName=rbAdmin.getText().toString();
@@ -96,7 +101,7 @@ public class UserAddFragment extends BottomSheetDialogFragment {
                         userTypeName=rbUser.getText().toString();
                     }
 
-                    Call<ResultModel> userModelCall = Service.getServiceApi().postUser(token,userName,name,surname,eMail,userTypeName);
+                    Call<ResultModel> userModelCall = Service.getServiceApi().postUser(token,userName,name,surname,eMail,password,userTypeName);
 
                     userModelCall.enqueue(new Callback<ResultModel>() {
                         @Override
