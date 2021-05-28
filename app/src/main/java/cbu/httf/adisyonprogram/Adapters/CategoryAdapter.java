@@ -43,7 +43,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     public void onBindViewHolder(@NonNull  CategoriesHolder holder, int position) {
         holder.txtMenuCategory.setText(String.valueOf(mCategoryList.get(position).getCategoryName()));
 
-
         if (selected_position == position) {
             holder.itemView.setBackgroundColor(Color.parseColor("#A1A1A1"));
         }else{
