@@ -89,7 +89,7 @@
         android:layout_marginRight="20dp"
         android:ems="10"
         android:hint="Unit Price"
-        android:inputType="textPersonName"
+        android:inputType="numberSigned|text"
         android:textAlignment="center" />
 
     <Button
