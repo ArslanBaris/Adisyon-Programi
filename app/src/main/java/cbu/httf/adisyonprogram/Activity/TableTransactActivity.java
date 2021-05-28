@@ -14,11 +14,15 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import cbu.httf.adisyonprogram.Adapters.CategoryAdapter;
 import cbu.httf.adisyonprogram.Adapters.TableAdapter;
+import cbu.httf.adisyonprogram.Fragment.Category.CategoryUpdateFragment;
 import cbu.httf.adisyonprogram.Fragment.Table.TableAddFragment;
 import cbu.httf.adisyonprogram.Fragment.Table.TableUpdateFragment;
 import cbu.httf.adisyonprogram.Network.Service;
 import cbu.httf.adisyonprogram.R;
+import cbu.httf.adisyonprogram.data.model.CategoryModel;
+import cbu.httf.adisyonprogram.data.model.ResultModel;
 import cbu.httf.adisyonprogram.data.model.TablesModel;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -36,6 +40,7 @@ public class TableTransactActivity extends AppCompatActivity  {
     private String takenUserName;
     public   static String takentoken;
 
+    public  int tableId=0;
 
     private void init(){
         btnAddTable=(Button)findViewById(R.id.btnTableAdd);
@@ -43,15 +48,14 @@ public class TableTransactActivity extends AppCompatActivity  {
         btnDeleteTable=(Button)findViewById(R.id.btnTableDelete);
 
         tableAddFragment =  new TableAddFragment(takentoken);
-        tableUpdateFragment =  new TableUpdateFragment(takentoken);
-
+        tableUpdateFragment =  new TableUpdateFragment(takentoken,tableId);
         recyclerView=(RecyclerView)findViewById(R.id.table_recyclerView);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getSupportActionBar().setTitle("Table Transact");
-        getSupportActionBar().setIcon(R.drawable.ic_table);
+       // getSupportActionBar().setIcon(R.drawable.ic_table);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_table_transact);
 
@@ -72,6 +76,14 @@ public class TableTransactActivity extends AppCompatActivity  {
         recyclerView.setLayoutManager(linearLayoutManager);
         TableAdapter tableAdapter = new TableAdapter(tablesModels,getApplicationContext());
         recyclerView.setAdapter(tableAdapter);
+
+        tableAdapter.setOnItemClickListener(new TableAdapter.OnTableItemClickListener() {
+            @Override
+            public void onTableItemClick(TablesModel tablesModel, int position) {
+                tableId=tablesModel.getID();
+                tableUpdateFragment =  new TableUpdateFragment(takentoken,tableId);
+            }
+        });
     }
 
     public void getTables(){
@@ -105,8 +117,24 @@ public class TableTransactActivity extends AppCompatActivity  {
         tableUpdateFragment.show(getSupportFragmentManager(),"UPDATE TABLE");
     }
 
-    public void FragmentTableDelete(View v){
-        tableAddFragment.show(getSupportFragmentManager(),"DELETE TABLE");
+    public void TableDelete(View v){
+        Call<ResultModel> tableDeleteCall = Service.getServiceApi().deleteTable(takentoken,tableId);
+        tableDeleteCall.enqueue(new Callback<ResultModel>() {
+            @Override
+            public void onResponse(Call<ResultModel> call, Response<ResultModel> response) {
+                if(response.isSuccessful()){
+                    Toast.makeText(TableTransactActivity.this,"Transaction is successful.", Toast.LENGTH_LONG).show();
+                    recreate();
+                }else{
+                    Toast.makeText(TableTransactActivity.this, "Request failed. "+response.code() , Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResultModel> call, Throwable t) {
+                Toast.makeText(TableTransactActivity.this, "Request failed. "+t.getMessage() , Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
 }
