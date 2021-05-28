@@ -75,7 +75,8 @@ public interface ServiceApi {
                                @Field("name") String name,
                                @Field("surname") String surname,
                                @Field("eMail") String eMail,
-                               @Field("userTypeName") String userTypeName);
+                               @Field("password") String password,
+                               @Field("UserTypeName") String userTypeName);
 
     @FormUrlEncoded
     @POST("masalar")
