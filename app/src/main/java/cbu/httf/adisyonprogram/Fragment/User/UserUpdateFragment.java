@@ -49,7 +49,8 @@ public class UserUpdateFragment extends BottomSheetDialogFragment {
     private String userTypeName;
     private String token;
 
-    public UserUpdateFragment(String token) {
+    public UserUpdateFragment(String token,int id) {
+        this.id=id;
         this.token=token;
     }
 
@@ -72,6 +73,9 @@ public class UserUpdateFragment extends BottomSheetDialogFragment {
         editTextPassword=(EditText)view.findViewById(R.id.editTextUpdatePassword);
         rbAdmin=(RadioButton)view.findViewById(R.id.rbUpdateAdmin);
         rbUser=(RadioButton)view.findViewById(R.id.rbUpdateUser);
+
+        if(id!=0)
+            editTextId.setText(String.valueOf(id));
 
         imgClose = view.findViewById(R.id.update_user_imgClose);
 
@@ -100,6 +104,7 @@ public class UserUpdateFragment extends BottomSheetDialogFragment {
                     name = editTextName.getText().toString();
                     surname = editTextSurname.getText().toString();
                     eMail = editTextEmail.getText().toString();
+                    password=editTextPassword.getText().toString();
 
                     if (rbAdmin.isChecked()){
                         userTypeName=rbAdmin.getText().toString();
