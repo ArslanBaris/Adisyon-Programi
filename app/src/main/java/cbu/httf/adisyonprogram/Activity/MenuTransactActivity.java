@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -39,13 +40,15 @@ public class MenuTransactActivity extends AppCompatActivity {
     private CategoryUpdateFragment categoryUpdateFragment;
 
     private String takenUserName;
-    public   static String takentoken;
+
+    public static String takentoken;
+    public  int categoryId;
+    public  int productId;
 
     private RecyclerView recyclerViewCategory;
     private RecyclerView recyclerViewProduct;
 
-    private int categoryId;
-    private  int productId;
+
 
     static ArrayList<Integer> categories;
 
@@ -75,14 +78,20 @@ public class MenuTransactActivity extends AppCompatActivity {
 
         getCategories();
 
+
+
+        int givenProductId=productId;
+        int givenCategoryId=categoryId;
+        Log.d("productId",String.valueOf(productId));
+        Log.d("productId",String.valueOf(categoryId));
         menuAddFragment =  new MenuAddFragment(takentoken,categories);
-        menuUpdateFragment =  new MenuUpdateFragment(takentoken,categories);
+
         categoryAddFragment =  new CategoryAddFragment(takentoken);
-        categoryUpdateFragment =  new CategoryUpdateFragment(takentoken);
+
     }
 
     public void initCategories(ArrayList<CategoryModel> categoryModels){
-
+        int value=0;
         LinearLayoutManager linearLayoutManager= new LinearLayoutManager(getApplicationContext());
         recyclerViewCategory.setLayoutManager(linearLayoutManager);
         CategoryAdapter categoryAdapter = new CategoryAdapter(categoryModels,getApplicationContext());
@@ -92,13 +101,15 @@ public class MenuTransactActivity extends AppCompatActivity {
             @Override
             public void onCategoryItemClick(CategoryModel categoryModel, int position) {
                 categoryId=categoryModel.getCategoryId();
-                Toast.makeText(MenuTransactActivity.this, "C ID: "+categoryId , Toast.LENGTH_LONG).show();
-                getProducts(categoryId);
+                Toast.makeText(MenuTransactActivity.this, "init c: "+categoryId , Toast.LENGTH_LONG).show();
+                categoryUpdateFragment =  new CategoryUpdateFragment(takentoken,categoryId);
+                getProducts();
             }
         });
     }
 
     public void getCategories(){
+
         Call<List<CategoryModel>> categoriesModelCall = Service.getServiceApi().getCategories(takentoken);
 
         categoriesModelCall.enqueue(new Callback<List<CategoryModel>>() {
@@ -107,7 +118,6 @@ public class MenuTransactActivity extends AppCompatActivity {
                 if(response.isSuccessful()){
                     ArrayList<CategoryModel> categoriesModels = new ArrayList<>();
                     categoriesModels =(ArrayList<CategoryModel>) response.body();
-
 
                     for(CategoryModel categoryModel: categoriesModels){
                         categories.add(categoryModel.getCategoryId());
@@ -127,8 +137,8 @@ public class MenuTransactActivity extends AppCompatActivity {
         });
     }
 
-    public void getProducts(int categoryId){
-        Toast.makeText(MenuTransactActivity.this, "C ID: "+categoryId , Toast.LENGTH_LONG).show();
+    public void getProducts(){
+
         Call<List<MenuModel>> productsModelCall = Service.getServiceApi().getMenu(takentoken);
 
         productsModelCall.enqueue(new Callback<List<MenuModel>>() {
@@ -170,7 +180,8 @@ public class MenuTransactActivity extends AppCompatActivity {
             @Override
             public void onProductItemClick(MenuModel menuModel, int position) {
                 productId=menuModel.getID();
-                Toast.makeText(MenuTransactActivity.this, "p: "+productId , Toast.LENGTH_LONG).show();
+                menuUpdateFragment =  new MenuUpdateFragment(takentoken,categories,productId);
+
             }
         });
     }
@@ -220,7 +231,7 @@ public class MenuTransactActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ResultModel> call, Response<ResultModel> response) {
                 if(response.isSuccessful()){
-                    Toast.makeText(MenuTransactActivity.this,"Transaction is successful."+response.body().getResult(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(MenuTransactActivity.this,"Transaction is successful.", Toast.LENGTH_LONG).show();
                     recreate();
                 }else{
                     Toast.makeText(MenuTransactActivity.this, "Request failed. "+response.code() , Toast.LENGTH_LONG).show();
