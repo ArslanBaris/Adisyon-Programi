@@ -35,6 +35,7 @@ public class UserUpdateFragment extends BottomSheetDialogFragment {
     private EditText editTextName;
     private EditText editTextSurname;
     private EditText editTextEmail;
+    private EditText editTextPassword;
 
     private RadioButton rbAdmin;
     private  RadioButton rbUser;
@@ -44,6 +45,7 @@ public class UserUpdateFragment extends BottomSheetDialogFragment {
     private String name;
     private String surname;
     private String eMail;
+    private String password;
     private String userTypeName;
     private String token;
 
@@ -64,9 +66,10 @@ public class UserUpdateFragment extends BottomSheetDialogFragment {
 
         editTextId=(EditText)view.findViewById(R.id.editTextUpdateUserID);
         editTextUserName=(EditText)view.findViewById(R.id.editTextUpdateUsername);
-        editTextName=(EditText)view.findViewById(R.id.editTextAddName);
+        editTextName=(EditText)view.findViewById(R.id.editTextUpdateName);
         editTextSurname=(EditText)view.findViewById(R.id.editTextUpdateSurname);
         editTextEmail=(EditText)view.findViewById(R.id.editTextUpdateEmail);
+        editTextPassword=(EditText)view.findViewById(R.id.editTextUpdatePassword);
         rbAdmin=(RadioButton)view.findViewById(R.id.rbUpdateAdmin);
         rbUser=(RadioButton)view.findViewById(R.id.rbUpdateUser);
 
@@ -79,17 +82,18 @@ public class UserUpdateFragment extends BottomSheetDialogFragment {
             }
         });
 
-        putUser = (Button)view.findViewById(R.id.postUser);
+        putUser = (Button)view.findViewById(R.id.putUser);
 
         putUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!TextUtils.isEmpty(editTextId.getText().toString())||
-                        !TextUtils.isEmpty(editTextUserName.getText().toString())||
-                        !TextUtils.isEmpty(editTextName.getText().toString())||
-                        !TextUtils.isEmpty(editTextSurname.getText().toString())||
-                        !TextUtils.isEmpty(editTextEmail.getText().toString())||
-                        (!rbAdmin.isChecked()&& (!rbUser.isChecked()))){
+                if (!TextUtils.isEmpty(editTextId.getText().toString())&&
+                        !TextUtils.isEmpty(editTextUserName.getText().toString())&&
+                        !TextUtils.isEmpty(editTextName.getText().toString())&&
+                        !TextUtils.isEmpty(editTextSurname.getText().toString())&&
+                        !TextUtils.isEmpty(editTextEmail.getText().toString())&&
+                        !TextUtils.isEmpty(editTextPassword.getText().toString())&&
+                        (rbAdmin.isChecked() || (rbUser.isChecked()))){
 
                     id = Integer.parseInt(editTextId.getText().toString());
                     userName = editTextUserName.getText().toString();
@@ -103,7 +107,7 @@ public class UserUpdateFragment extends BottomSheetDialogFragment {
                         userTypeName=rbUser.getText().toString();
                     }
 
-                    UserModel userModel = new UserModel(id,userName,name,surname,eMail,userTypeName);
+                    UserModel userModel = new UserModel(id,userName,name,surname,eMail,password,userTypeName);
 
                     Call<ResultModel> userModelCall = Service.getServiceApi().putUser(token,userModel);
 

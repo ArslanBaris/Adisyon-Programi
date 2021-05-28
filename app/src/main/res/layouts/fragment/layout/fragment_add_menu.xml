@@ -73,7 +73,7 @@
         android:layout_marginRight="20dp"
         android:ems="10"
         android:hint="Unit Price"
-        android:inputType="textPersonName"
+        android:inputType="numberSigned|text"
         android:textAlignment="center" />
 
     <Button
@@ -85,7 +85,7 @@
         android:layout_marginLeft="30dp"
         android:layout_marginTop="60dp"
         android:layout_marginRight="30dp"
-        android:layout_marginBottom="360dp"
+        android:layout_marginBottom="330dp"
         android:onClick="btnMenuSave"
         android:text="Save" />
 
