@@ -74,10 +74,9 @@ public class MenuUpdateFragment extends BottomSheetDialogFragment {
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerUpdateCategory.setAdapter(arrayAdapter);
 
-        Toast.makeText(getContext(), "productId önce "+String.valueOf(productId), Toast.LENGTH_LONG).show();
-        Toast.makeText(getContext(), "token "+token, Toast.LENGTH_LONG).show();
-        //editTextID.setText(Integer.parseInt(productId));
-        //Toast.makeText(getContext(), "productId sonra"+editTextID.getText().toString(), Toast.LENGTH_LONG).show();
+        if(productId!=0)
+            editTextID.setText(String.valueOf(productId));
+
         imgClose = view.findViewById(R.id.update_menu_imgClose);
 
         imgClose.setOnClickListener(new View.OnClickListener() {
