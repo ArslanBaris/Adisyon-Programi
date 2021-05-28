@@ -39,9 +39,9 @@ public class TableUpdateFragment extends BottomSheetDialogFragment {
     private String token;
 
 
-    public TableUpdateFragment(String token) {
-
+    public TableUpdateFragment(String token,int tableId) {
         this.token=token;
+        this.tableId=tableId;
     }
 
     @Nullable
@@ -57,6 +57,9 @@ public class TableUpdateFragment extends BottomSheetDialogFragment {
         editTextTableId=(EditText)view.findViewById(R.id.editTextUpdateTableId);
         editTextTableName=(EditText)view.findViewById(R.id.editTextUpdateTableName);
         editTextTableNumber=(EditText)view.findViewById(R.id.editTextUpdateTableNumber);
+
+        if(tableId!=0)
+            editTextTableId.setText(String.valueOf(tableId));
 
         imgClose = view.findViewById(R.id.update_table_imgClose);
 
