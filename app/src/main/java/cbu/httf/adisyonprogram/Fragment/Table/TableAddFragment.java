@@ -56,9 +56,6 @@ public class TableAddFragment extends BottomSheetDialogFragment {
         postTable = (Button)view.findViewById(R.id.postTable);
 
 
-
-
-
     }
 
     private  void Notification(){
@@ -117,7 +114,9 @@ public class TableAddFragment extends BottomSheetDialogFragment {
         postTable.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!TextUtils.isEmpty(editTextTableName.getText().toString()) && !TextUtils.isEmpty(editTextTableNumber.getText().toString())) {
+                if (    !TextUtils.isEmpty(editTextTableName.getText().toString()) &&
+                        !TextUtils.isEmpty(editTextTableNumber.getText().toString())) {
+
                     tableName = editTextTableName.getText().toString();
                     tableNumber = Integer.parseInt(editTextTableNumber.getText().toString());
 
