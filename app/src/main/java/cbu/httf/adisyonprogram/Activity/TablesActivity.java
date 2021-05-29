@@ -76,7 +76,11 @@ public class TablesActivity extends AppCompatActivity {
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(TablesActivity.this, "Yıklama" , Toast.LENGTH_LONG).show();
+                startActivity(new Intent(TablesActivity.this,TableItemActivity.class).
+                        putExtra("token",takentoken).
+                        putExtra("tableId",tablesModel.get(position).getID()).
+                        putExtra("tableName",tablesModel.get(position).getAd()).
+                        putExtra("tableNumber",tablesModel.get(position).getTableNo()));
             }
         });
     }
