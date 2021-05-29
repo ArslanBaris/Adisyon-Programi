@@ -14,15 +14,18 @@ import java.util.List;
 
 import cbu.httf.adisyonprogram.R;
 import cbu.httf.adisyonprogram.data.model.Item;
+import cbu.httf.adisyonprogram.data.model.MenuModel;
+import cbu.httf.adisyonprogram.data.model.OrderList;
 
 public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.CardHolder>{
 
-    private List<Item> Item_List;
+    private List<OrderList> Item_List;
     public int Item_Piece;
+    public int Item_ID,Table_ID;
     public String Item_Name;
-    List<Item> ItemEdit_list = new ArrayList<>();
+    List<OrderList> ItemEdit_list = new ArrayList<>();
 
-    public ItemListAdapter(List<Item> item_List) {
+    public ItemListAdapter(List<OrderList> item_List) {
         this.Item_List = item_List;
     }
 
@@ -42,39 +45,43 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.CardHo
 
         holder.btn_pls.setOnClickListener(View -> {
             Item_Name = Item_List.get(position).getItem_Name();
+            Item_ID = Item_List.get(position).getItem_ID();
+            Table_ID = Item_List.get(position).getTable_ID();
             Item_Piece = Integer.parseInt(Item_List.get(position).getItem_Piece());
             Item_Piece++;
-            Item_List.set(position, new Item(Item_List.get(position).getItem_Name(), String.valueOf(Item_Piece)));
+            Item_List.set(position, new OrderList(Item_List.get(position).getItem_Name(), String.valueOf(Item_Piece),Item_List.get(position).getItem_ID(),Item_List.get(position).getTable_ID()));
             holder.tv_Piece.setText(Item_List.get(position).getItem_Piece());
             getItem_List();
         });
 
         holder.btn_min.setOnClickListener(View -> {
             Item_Name = Item_List.get(position).getItem_Name();
+            Item_ID = Item_List.get(position).getItem_ID();
+            Table_ID = Item_List.get(position).getTable_ID();
             Item_Piece = Integer.parseInt(Item_List.get(position).getItem_Piece());
             if (Item_Piece > 0)
                 Item_Piece--;
             else
                 Item_Piece = 0;
-            Item_List.set(position, new Item(Item_List.get(position).getItem_Name(), String.valueOf(Item_Piece)));
+            Item_List.set(position, new OrderList(Item_List.get(position).getItem_Name(), String.valueOf(Item_Piece),Item_List.get(position).getItem_ID(),Item_List.get(position).getTable_ID()));
             holder.tv_Piece.setText(Item_List.get(position).getItem_Piece());
             getItem_List();
         });
     }
     boolean control;
-    public List<Item> getItem_List(){
-        List<Item> Item_List = new ArrayList<>();
+    public List<OrderList> getItem_List(){
+        List<OrderList> Item_List = new ArrayList<>();
         control=true;
-        Item_List.add(new Item(Item_Name,String.valueOf(Item_Piece)));
+        Item_List.add(new OrderList(Item_Name,String.valueOf(Item_Piece),Item_ID,Table_ID));
         for (int i = 0; i<ItemEdit_list.size();i++){
             if (Item_List.get(0).getItem_Name()==ItemEdit_list.get(i).getItem_Name()) {
-                ItemEdit_list.set(i, new Item(ItemEdit_list.get(i).getItem_Name(), Item_List.get(0).getItem_Piece()));
+                ItemEdit_list.set(i, new OrderList(ItemEdit_list.get(i).getItem_Name(), Item_List.get(0).getItem_Piece(), Item_ID, Table_ID));
                 control=false;
             }
         }
         if (control)
         {
-            ItemEdit_list.add(new Item(Item_List.get(0).getItem_Name(),Item_List.get(0).getItem_Piece()));
+            ItemEdit_list.add(new OrderList(Item_List.get(0).getItem_Name(),Item_List.get(0).getItem_Piece(), Item_ID, Table_ID));
         }
         return ItemEdit_list;
     }
