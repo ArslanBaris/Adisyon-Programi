@@ -1,5 +1,6 @@
 package cbu.httf.adisyonprogram.Fragment.User;
 
+import android.app.Notification;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -13,19 +14,20 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
-import cbu.httf.adisyonprogram.Activity.TableTransactActivity;
 import cbu.httf.adisyonprogram.Activity.UserTransactActivity;
 import cbu.httf.adisyonprogram.Network.Service;
 import cbu.httf.adisyonprogram.R;
 import cbu.httf.adisyonprogram.data.model.ResultModel;
-import cbu.httf.adisyonprogram.data.model.TablesModel;
 import cbu.httf.adisyonprogram.data.model.UserModel;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import static cbu.httf.adisyonprogram.Notification.App.CHANNEL_1_ID;
 
 public class UserUpdateFragment extends BottomSheetDialogFragment {
     private ImageView imgClose;
@@ -49,7 +51,10 @@ public class UserUpdateFragment extends BottomSheetDialogFragment {
     private String userTypeName;
     private String token;
 
-    public UserUpdateFragment(String token) {
+    private NotificationManagerCompat notificationManager;
+
+    public UserUpdateFragment(String token,int id) {
+        this.id=id;
         this.token=token;
     }
 
@@ -60,6 +65,18 @@ public class UserUpdateFragment extends BottomSheetDialogFragment {
         return view;
     }
 
+    public void sendOnChannel1(int id,String name,String surname) {
+        String title = "Updated User";
+        String message = String.valueOf(id)+" | "+ name+" "+surname;
+        Notification notification = new NotificationCompat.Builder(getContext(), CHANNEL_1_ID)
+                .setSmallIcon(R.drawable.ic_baseline_person_24)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                .build();
+        notificationManager.notify(1,notification);
+    }
 
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
@@ -72,6 +89,10 @@ public class UserUpdateFragment extends BottomSheetDialogFragment {
         editTextPassword=(EditText)view.findViewById(R.id.editTextUpdatePassword);
         rbAdmin=(RadioButton)view.findViewById(R.id.rbUpdateAdmin);
         rbUser=(RadioButton)view.findViewById(R.id.rbUpdateUser);
+        notificationManager = NotificationManagerCompat.from(getContext());
+
+        if(id!=0)
+            editTextId.setText(String.valueOf(id));
 
         imgClose = view.findViewById(R.id.update_user_imgClose);
 
@@ -100,6 +121,7 @@ public class UserUpdateFragment extends BottomSheetDialogFragment {
                     name = editTextName.getText().toString();
                     surname = editTextSurname.getText().toString();
                     eMail = editTextEmail.getText().toString();
+                    password=editTextPassword.getText().toString();
 
                     if (rbAdmin.isChecked()){
                         userTypeName=rbAdmin.getText().toString();
@@ -116,6 +138,7 @@ public class UserUpdateFragment extends BottomSheetDialogFragment {
                         public void onResponse(Call<ResultModel> call, Response<ResultModel> response) {
                             if (response.isSuccessful()) {
                                 Toast.makeText(getContext(), "Request Successful." , Toast.LENGTH_LONG).show();
+                                sendOnChannel1(id,name,surname);
                                 ((UserTransactActivity)getActivity()).recreate();
                                 dismiss();
 

@@ -35,7 +35,6 @@ public class AdminActivity extends AppCompatActivity {
         Intent intent = new Intent(AdminActivity.this,UserTransactActivity.class);
         intent.putExtra("userName",takenUserName);
         intent.putExtra("token",takentoken);
-        //finish();
         startActivity(intent);
     }
 
@@ -46,15 +45,13 @@ public class AdminActivity extends AppCompatActivity {
         Intent intent = new Intent(AdminActivity.this,TableTransactActivity.class);
         intent.putExtra("userName",takenUserName);
         intent.putExtra("token",takentoken);
-        //finish();
-        startActivity(intent);
+        startActivityForResult(intent,1);
     }
     public void btnMenu(View v){
 
         Intent intent = new Intent(AdminActivity.this,MenuTransactActivity.class);
         intent.putExtra("userName",takenUserName);
         intent.putExtra("token",takentoken);
-        //finish();
         startActivity(intent);
     }
 

@@ -1,9 +1,12 @@
 package cbu.httf.adisyonprogram.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Notification;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -14,34 +17,34 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cbu.httf.adisyonprogram.Adapters.UserAdapter;
-import cbu.httf.adisyonprogram.Fragment.User.UserAddFragment;
 import cbu.httf.adisyonprogram.Fragment.User.UserUpdateFragment;
 import cbu.httf.adisyonprogram.Network.Service;
 import cbu.httf.adisyonprogram.R;
+import cbu.httf.adisyonprogram.data.model.ResultModel;
 import cbu.httf.adisyonprogram.data.model.UserModel;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
+import static cbu.httf.adisyonprogram.Notification.App.CHANNEL_1_ID;
 
 public class UserTransactActivity extends AppCompatActivity {
 
     private Button btnAddUser,btnUpdateUser,btnDeleteUser;
 
-    private UserAddFragment userAddFragment;
     private UserUpdateFragment userUpdateFragment;
 
     private RecyclerView recyclerView;
     public   static String takentoken;
     public   String takenUserName;
-
+    public  int userId=0;
+    public String name,surname;
+    private NotificationManagerCompat notificationManager;
     private void init(){
         btnAddUser=(Button)findViewById(R.id.btnUserAdd);
         btnUpdateUser=(Button)findViewById(R.id.btnUserUpdate);
         btnDeleteUser=(Button)findViewById(R.id.btnUserDelete);
-
-        userAddFragment =  new UserAddFragment(takentoken);
-        userUpdateFragment =  new UserUpdateFragment(takentoken);
+        notificationManager = NotificationManagerCompat.from(this);
+        userUpdateFragment =  new UserUpdateFragment(takentoken,userId);
 
         recyclerView=(RecyclerView)findViewById(R.id.user_recyclerView);
     }
@@ -52,7 +55,6 @@ public class UserTransactActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_transact);
         getSupportActionBar().setTitle("User Transact");
-
 
         Intent takenIntent = getIntent();
         takenUserName = takenIntent.getStringExtra("userName");
@@ -70,6 +72,16 @@ public class UserTransactActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(linearLayoutManager);
         UserAdapter userAdapter = new UserAdapter(usersModels,getApplicationContext());
         recyclerView.setAdapter(userAdapter);
+
+        userAdapter.setOnItemClickListener(new UserAdapter.OnUserItemClickListener() {
+            @Override
+            public void onUserItemClick(UserModel userModel, int position) {
+                userId=userModel.getID();
+                name=userModel.getName();
+                surname=userModel.getSurname();
+                userUpdateFragment =  new UserUpdateFragment(takentoken,userId);
+            }
+        });
     }
 
     public void getUsers() {
@@ -96,7 +108,6 @@ public class UserTransactActivity extends AppCompatActivity {
     }
 
     public void FragmentUserAdd(View v){
-        //userAddFragment.show(getSupportFragmentManager(),"ADD USER");
         startActivity(new Intent(UserTransactActivity.this,SignUpActivity.class).putExtra("token",takentoken));
 
     }
@@ -105,9 +116,41 @@ public class UserTransactActivity extends AppCompatActivity {
         userUpdateFragment.show(getSupportFragmentManager(),"UPDATE USER");
     }
 
-    public void UserDelete(View v){
-        //tableAddFragment.show(getSupportFragmentManager(),"DELETE TABLE");
+    public void sendOnChannel1() {
+        String title = "Deleted User";
+        String message = userId+" | "+name+" "+surname;
+        Notification notification = new NotificationCompat.Builder(this, CHANNEL_1_ID)
+                .setSmallIcon(R.drawable.ic_baseline_person_24)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                .build();
+        notificationManager.notify(1,notification);
     }
+
+    public void UserDelete(View v){
+        Call<ResultModel> userDeleteCall = Service.getServiceApi().deleteUser(takentoken,userId);
+        userDeleteCall.enqueue(new Callback<ResultModel>() {
+            @Override
+            public void onResponse(Call<ResultModel> call, Response<ResultModel> response) {
+                if(response.isSuccessful()){
+                    Toast.makeText(UserTransactActivity.this,"Transaction is successful.", Toast.LENGTH_LONG).show();
+                    sendOnChannel1();
+                    recreate();
+                }else{
+                    Toast.makeText(UserTransactActivity.this, "Request failed. "+response.code() , Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResultModel> call, Throwable t) {
+                Toast.makeText(UserTransactActivity.this, "Request failed. "+t.getMessage() , Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+
 
 
 }

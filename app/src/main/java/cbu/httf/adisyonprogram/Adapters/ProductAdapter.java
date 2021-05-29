@@ -95,11 +95,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.Products
                             notifyDataSetChanged();
                         }
                     }
-                    /*int position = getAdapterPosition();
-
-                    if(listener!= null && position!=RecyclerView.NO_POSITION){
-                        listener.onProductItemClick(mMenuList.get(position),position);
-                    }*/
                 }
             });
         }

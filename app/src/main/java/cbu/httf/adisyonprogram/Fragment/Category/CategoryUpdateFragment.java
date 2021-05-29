@@ -1,5 +1,6 @@
 package cbu.httf.adisyonprogram.Fragment.Category;
 
+import android.app.Notification;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -12,6 +13,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
@@ -23,6 +26,7 @@ import cbu.httf.adisyonprogram.data.model.ResultModel;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import static cbu.httf.adisyonprogram.Notification.App.CHANNEL_1_ID;
 
 public class CategoryUpdateFragment extends BottomSheetDialogFragment {
 
@@ -33,6 +37,7 @@ public class CategoryUpdateFragment extends BottomSheetDialogFragment {
     private EditText editTextCategoryID;
     private int categoryId;
     private String categoryName;
+    private NotificationManagerCompat notificationManager;
 
     private String token;
 
@@ -48,14 +53,29 @@ public class CategoryUpdateFragment extends BottomSheetDialogFragment {
         return view;
     }
 
+    public void sendOnChannel1(int categoryID,String categoryName) {
+        String title = "Updated Category";
+        String message = String.valueOf(categoryID)+" | "+ categoryName;
+        Notification notification = new NotificationCompat.Builder(getContext(), CHANNEL_1_ID)
+                .setSmallIcon(R.drawable.ic_category)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                .build();
+        notificationManager.notify(1,notification);
+    }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
 
         editTextCategoryID=(EditText)view.findViewById(R.id.editTextUpdateCategoryId);
-        editTextCategoryName=(EditText)view.findViewById(R.id.editTextAddCategoryName);
-        Toast.makeText(getContext(), "categorYID "+categoryId , Toast.LENGTH_LONG).show();
-        editTextCategoryID.setText(String.valueOf(categoryId));
+        editTextCategoryName=(EditText)view.findViewById(R.id.editTextUpdateCategoryName);
+        notificationManager = NotificationManagerCompat.from(getContext());
+
+        if(categoryId!=0)
+            editTextCategoryID.setText(String.valueOf(categoryId));
 
         imgClose = view.findViewById(R.id.update_category_imgClose);
 
@@ -85,6 +105,7 @@ public class CategoryUpdateFragment extends BottomSheetDialogFragment {
                         public void onResponse(Call<ResultModel> call, Response<ResultModel> response) {
                             if (response.isSuccessful()) {
                                 Toast.makeText(getContext(), "Request Successful." , Toast.LENGTH_LONG).show();
+                                sendOnChannel1(categoryId,categoryName);
                                 ((MenuTransactActivity)getActivity()).recreate();
                                 dismiss();
 

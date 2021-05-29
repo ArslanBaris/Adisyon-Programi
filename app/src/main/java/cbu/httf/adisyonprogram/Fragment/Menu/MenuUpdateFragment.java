@@ -1,5 +1,6 @@
 package cbu.httf.adisyonprogram.Fragment.Menu;
 
+import android.app.Notification;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -14,21 +15,22 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.util.ArrayList;
 
 import cbu.httf.adisyonprogram.Activity.MenuTransactActivity;
-import cbu.httf.adisyonprogram.Activity.TableTransactActivity;
 import cbu.httf.adisyonprogram.Network.Service;
 import cbu.httf.adisyonprogram.R;
 import cbu.httf.adisyonprogram.data.model.MenuModel;
 import cbu.httf.adisyonprogram.data.model.ResultModel;
-import cbu.httf.adisyonprogram.data.model.TablesModel;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import static cbu.httf.adisyonprogram.Notification.App.CHANNEL_1_ID;
 
 public class MenuUpdateFragment extends BottomSheetDialogFragment {
 
@@ -45,13 +47,15 @@ public class MenuUpdateFragment extends BottomSheetDialogFragment {
     private float unitPrice;
     private String token;
 
+    private NotificationManagerCompat notificationManager;
     ArrayList<Integer> categories;
     ArrayAdapter<Integer> arrayAdapter;
 
-    public MenuUpdateFragment(String token,  ArrayList<Integer> categories,int productId) {
+    public MenuUpdateFragment(String token,  ArrayList<Integer> categories,int productId,int category) {
         this.categories=categories;
         this.token=token;
         this.productId=productId;
+        this.category=category;
     }
 
     @Nullable
@@ -60,6 +64,20 @@ public class MenuUpdateFragment extends BottomSheetDialogFragment {
         View view = inflater.inflate(R.layout.fragment_update_menu,container,false);
         return view;
     }
+
+    public void sendOnChannel1(int productId,String productName) {
+        String title = "Updated Product";
+        String message = String.valueOf(productId)+" | "+ productName;
+        Notification notification = new NotificationCompat.Builder(getContext(), CHANNEL_1_ID)
+                .setSmallIcon(R.drawable.ic_product)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                .build();
+        notificationManager.notify(1,notification);
+    }
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
@@ -70,14 +88,20 @@ public class MenuUpdateFragment extends BottomSheetDialogFragment {
         editTextProductName=(EditText)view.findViewById(R.id.editTextUpdateProductName);
         editTextUnitPrice=(EditText)view.findViewById(R.id.editTextUpdateUnitPrice);
 
+        notificationManager = NotificationManagerCompat.from(getContext());
+
         arrayAdapter = new ArrayAdapter(this.getActivity(), android.R.layout.simple_spinner_item,categories);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerUpdateCategory.setAdapter(arrayAdapter);
 
-        Toast.makeText(getContext(), "productId önce "+String.valueOf(productId), Toast.LENGTH_LONG).show();
-        Toast.makeText(getContext(), "token "+token, Toast.LENGTH_LONG).show();
-        //editTextID.setText(Integer.parseInt(productId));
-        //Toast.makeText(getContext(), "productId sonra"+editTextID.getText().toString(), Toast.LENGTH_LONG).show();
+        if(productId!=0)
+            editTextID.setText(String.valueOf(productId));
+
+        if(category!=0)
+            spinnerUpdateCategory.setSelection( categories.indexOf(category));
+
+
+
         imgClose = view.findViewById(R.id.update_menu_imgClose);
 
         imgClose.setOnClickListener(new View.OnClickListener() {
@@ -110,6 +134,7 @@ public class MenuUpdateFragment extends BottomSheetDialogFragment {
                         public void onResponse(Call<ResultModel> call, Response<ResultModel> response) {
                             if(response.isSuccessful()){
                                 Toast.makeText(getContext(), "Request Successful." , Toast.LENGTH_LONG).show();
+                                sendOnChannel1(productId,productName);
                                 ((MenuTransactActivity)getActivity()).recreate();
                                 dismiss();
 

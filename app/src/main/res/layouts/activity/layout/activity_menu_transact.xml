@@ -32,8 +32,8 @@
 
     <Button
         android:id="@+id/btnCategoryAdd"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_marginTop="25dp"
         android:layout_marginEnd="10dp"
         android:layout_marginRight="10dp"
@@ -44,8 +44,8 @@
 
     <Button
         android:id="@+id/btnCategoryUpdate"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_toLeftOf="@+id/btnCategoryDelete"
         android:layout_marginTop="25dp"
         android:layout_marginEnd="10dp"
@@ -56,8 +56,8 @@
 
     <Button
         android:id="@+id/btnCategoryDelete"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_marginTop="25dp"
         android:layout_marginRight="10dp"
         android:layout_toStartOf="@+id/product_recyclerView"
@@ -68,8 +68,8 @@
 
     <Button
         android:id="@+id/btnMenuAdd"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_marginTop="25dp"
         android:layout_marginEnd="10dp"
         android:layout_marginRight="10dp"
@@ -80,8 +80,8 @@
 
     <Button
         android:id="@+id/btnMenuUpdate"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_toLeftOf="@+id/btnMenuDelete"
         android:layout_marginTop="25dp"
         android:layout_marginEnd="10dp"
@@ -92,8 +92,8 @@
 
     <Button
         android:id="@+id/btnMenuDelete"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"

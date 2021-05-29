@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+import cbu.httf.adisyonprogram.Activity.UserTransactActivity;
 import cbu.httf.adisyonprogram.R;
 import cbu.httf.adisyonprogram.data.model.UserModel;
 
@@ -20,7 +21,9 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UsersHolder>  
     private Context mContext;
     private ArrayList<UserModel> mUserList;
 
-    private int row_index=-1;
+    private OnUserItemClickListener listener;
+
+    private int selected_position=-1;
 
     public UserAdapter(ArrayList<UserModel> mUserList,Context mContext) {
         this.mUserList=mUserList;
@@ -44,17 +47,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UsersHolder>  
         holder.txtName.setText(mUserList.get(position).getName());
         holder.txtSurname.setText(mUserList.get(position).getSurname());
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                row_index = position;
-
-                notifyDataSetChanged();
-            }
-        });
-
-        if (row_index == position) {
+        if (selected_position == position) {
             holder.itemView.setBackgroundColor(Color.parseColor("#A1A1A1"));
         }else{
             holder.itemView.setBackgroundColor(Color.parseColor("#ffffff"));
@@ -80,6 +73,29 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UsersHolder>  
             txtUserType= itemView.findViewById(R.id.user_item_txtUserType);
             txtName= itemView.findViewById(R.id.user_item_txtName);
             txtSurname= itemView.findViewById(R.id.user_item_txtSurname);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    if(listener != null){
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION){
+                            listener.onUserItemClick(mUserList.get(position),position);
+                            selected_position = position;
+                            notifyDataSetChanged();
+                        }
+                    }
+                }
+            });
         }
+    }
+
+    public interface OnUserItemClickListener{
+        void onUserItemClick(UserModel userModel, int position);
+    }
+
+    public void setOnItemClickListener(OnUserItemClickListener listener){
+        this.listener=listener;
     }
 }

@@ -1,8 +1,8 @@
 package cbu.httf.adisyonprogram.Fragment.Table;
 
+import android.app.Notification;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,10 +13,11 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
-import org.json.JSONObject;
 
 import cbu.httf.adisyonprogram.Activity.TableTransactActivity;
 import cbu.httf.adisyonprogram.Network.Service;
@@ -26,6 +27,8 @@ import cbu.httf.adisyonprogram.data.model.TablesModel;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static cbu.httf.adisyonprogram.Notification.App.CHANNEL_1_ID;
 
 public class TableUpdateFragment extends BottomSheetDialogFragment {
     private ImageView imgClose;
@@ -38,10 +41,11 @@ public class TableUpdateFragment extends BottomSheetDialogFragment {
     private int tableNumber;
     private String token;
 
+    private NotificationManagerCompat notificationManager;
 
-    public TableUpdateFragment(String token) {
-
+    public TableUpdateFragment(String token,int tableId) {
         this.token=token;
+        this.tableId=tableId;
     }
 
     @Nullable
@@ -51,12 +55,29 @@ public class TableUpdateFragment extends BottomSheetDialogFragment {
         return view;
     }
 
+    public void sendOnChannel1(int tableId,String tableName,int tableNumber) {
+        String title = "Updated table";
+        String message = String.valueOf(tableId)+" | "+ tableName+ ": "+String.valueOf(tableNumber);
+        Notification notification = new NotificationCompat.Builder(getContext(), CHANNEL_1_ID)
+                .setSmallIcon(R.drawable.ic_table_1)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                .build();
+        notificationManager.notify(1,notification);
+    }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         editTextTableId=(EditText)view.findViewById(R.id.editTextUpdateTableId);
         editTextTableName=(EditText)view.findViewById(R.id.editTextUpdateTableName);
         editTextTableNumber=(EditText)view.findViewById(R.id.editTextUpdateTableNumber);
+        notificationManager = NotificationManagerCompat.from(getContext());
+
+        if(tableId!=0)
+            editTextTableId.setText(String.valueOf(tableId));
 
         imgClose = view.findViewById(R.id.update_table_imgClose);
 
@@ -89,6 +110,7 @@ public class TableUpdateFragment extends BottomSheetDialogFragment {
                             public void onResponse(Call<ResultModel> call, Response<ResultModel> response) {
                                 if(response.isSuccessful()){
                                     Toast.makeText(getContext(), "Request Successful." , Toast.LENGTH_LONG).show();
+                                    sendOnChannel1(tableId,tableName,tableNumber);
                                     ((TableTransactActivity)getActivity()).recreate();
                                     dismiss();
 

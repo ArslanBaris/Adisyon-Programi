@@ -1,10 +1,6 @@
 package cbu.httf.adisyonprogram.Fragment.Table;
 
 import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -17,22 +13,24 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import cbu.httf.adisyonprogram.Activity.TableTransactActivity;
 import cbu.httf.adisyonprogram.Network.Service;
 import cbu.httf.adisyonprogram.R;
 import cbu.httf.adisyonprogram.data.model.ResultModel;
-import cbu.httf.adisyonprogram.data.model.TablesModel;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static cbu.httf.adisyonprogram.Notification.App.CHANNEL_1_ID;
+
 public class TableAddFragment extends BottomSheetDialogFragment {
+
 
     private ImageView imgClose;
     private Button postTable;
@@ -42,7 +40,7 @@ public class TableAddFragment extends BottomSheetDialogFragment {
     private int tableNumber;
     private String token;
 
-    public  static String action="cbu.httf.adisyonprogram.Fragment.Table.intent";
+    private NotificationManagerCompat notificationManager;
 
     public TableAddFragment(String token) {
 
@@ -54,44 +52,23 @@ public class TableAddFragment extends BottomSheetDialogFragment {
         editTextTableNumber=(EditText)view.findViewById(R.id.editTextAddTableNumber);
         imgClose = view.findViewById(R.id.add_table_imgClose);
         postTable = (Button)view.findViewById(R.id.postTable);
-
-
-
-
+        notificationManager = NotificationManagerCompat.from(getContext());
 
     }
 
-    private  void Notification(){
+    public void sendOnChannel1(int tableNumber,String tableName) {
+        String title = "Added Table";
+        String message = tableName+" : "+String.valueOf(tableNumber) ;
+        Notification notification = new NotificationCompat.Builder(getContext(), CHANNEL_1_ID)
+                .setSmallIcon(R.drawable.ic_table_1)
+                .setContentTitle(title)
+                .setContentText(message)
 
-        Intent intent= new Intent(getContext(),TableTransactActivity.class);
-        PendingIntent replyPendingIntent =
-                PendingIntent.getActivity(getContext(),0,intent,0);
-
-        NotificationManager notificationManager = (NotificationManager)getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-
-        //Notification.Builder builder= new Notification.Builder(getContext());
-        Notification builder= new Notification.Builder(getContext())
-                .setContentTitle("Bildirim")
-                .setContentText("Açıklama")
-                .setSmallIcon(R.drawable.ic_persons)
-                .setTicker("Bildirim geliyorrrr")
-                .setAutoCancel(true)
-                .setContentIntent(replyPendingIntent)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
                 .build();
-        /*builder.setContentTitle("Bildirim");
-        builder.setContentText("İlk Bildirim");
-        builder.setSmallIcon(R.drawable.ic_persons);
-        builder.setAutoCancel(true);
-        builder.setTicker("Bildirim geliyorrrr");*/
-
-
-        //builder.setContentIntent(replyPendingIntent);
-
-        //Notification notification = builder.build();
-        notificationManager.notify(0,builder);
-
+        notificationManager.notify(1,notification);
     }
-
 
     @Nullable
     @Override
@@ -117,7 +94,9 @@ public class TableAddFragment extends BottomSheetDialogFragment {
         postTable.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!TextUtils.isEmpty(editTextTableName.getText().toString()) && !TextUtils.isEmpty(editTextTableNumber.getText().toString())) {
+                if (    !TextUtils.isEmpty(editTextTableName.getText().toString()) &&
+                        !TextUtils.isEmpty(editTextTableNumber.getText().toString())) {
+
                     tableName = editTextTableName.getText().toString();
                     tableNumber = Integer.parseInt(editTextTableNumber.getText().toString());
 
@@ -127,8 +106,9 @@ public class TableAddFragment extends BottomSheetDialogFragment {
                         @Override
                         public void onResponse(Call<ResultModel> call, Response<ResultModel> response) {
                             if (response.isSuccessful()) {
-                                Toast.makeText(getContext(), "Request Successful." , Toast.LENGTH_LONG).show();
-                                Notification();
+                                                                Toast.makeText(getContext(), "Request Successful." , Toast.LENGTH_LONG).show();
+                                sendOnChannel1(tableNumber,tableName);
+
                                 ((TableTransactActivity)getActivity()).recreate();
                                 dismiss();
 

@@ -1,12 +1,11 @@
 package cbu.httf.adisyonprogram.Fragment.Menu;
 
-import android.app.NotificationManager;
+import android.app.Notification;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,21 +15,21 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import cbu.httf.adisyonprogram.Activity.MenuTransactActivity;
-import cbu.httf.adisyonprogram.Activity.TableTransactActivity;
 import cbu.httf.adisyonprogram.Network.Service;
 import cbu.httf.adisyonprogram.R;
-import cbu.httf.adisyonprogram.data.model.CategoryModel;
 import cbu.httf.adisyonprogram.data.model.ResultModel;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import static cbu.httf.adisyonprogram.Notification.App.CHANNEL_1_ID;
 
 public class MenuAddFragment extends BottomSheetDialogFragment {
 
@@ -43,13 +42,15 @@ public class MenuAddFragment extends BottomSheetDialogFragment {
     private String productName;
     private float unitPrice;
     private String token;
+
     ArrayList<Integer> categories;
-
     ArrayAdapter<Integer> arrayAdapter;
+    private NotificationManagerCompat notificationManager;
 
-    public MenuAddFragment(String token,  ArrayList<Integer> categories) {
+    public MenuAddFragment(String token,  ArrayList<Integer> categories,int category) {
         this.categories=categories;
         this.token=token;
+        this.category=category;
     }
 
     @Nullable
@@ -59,6 +60,18 @@ public class MenuAddFragment extends BottomSheetDialogFragment {
         return view;
     }
 
+    public void sendOnChannel1(String productName) {
+        String title = "Added Product";
+        String message = productName;
+        Notification notification = new NotificationCompat.Builder(getContext(), CHANNEL_1_ID)
+                .setSmallIcon(R.drawable.ic_product)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                .build();
+        notificationManager.notify(1,notification);
+    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
@@ -68,9 +81,14 @@ public class MenuAddFragment extends BottomSheetDialogFragment {
         editTextProductName=(EditText)view.findViewById(R.id.editTextAddProductName);
         editTextUnitPrice=(EditText)view.findViewById(R.id.editTextAddUnitPrice);
 
+        notificationManager = NotificationManagerCompat.from(getContext());
+
         arrayAdapter = new ArrayAdapter(this.getActivity(), android.R.layout.simple_spinner_item,categories);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerAddCategory.setAdapter(arrayAdapter);
+
+        if(category!=0)
+            spinnerAddCategory.setSelection(categories.indexOf(category));
 
 
         imgClose = view.findViewById(R.id.add_menu_imgClose);
@@ -103,6 +121,7 @@ public class MenuAddFragment extends BottomSheetDialogFragment {
                         public void onResponse(Call<ResultModel> call, Response<ResultModel> response) {
                             if (response.isSuccessful()) {
                                 Toast.makeText(getContext(), "Request Successful." , Toast.LENGTH_LONG).show();
+                                sendOnChannel1(productName);
                                 ((MenuTransactActivity)getActivity()).recreate();
                                 dismiss();
 

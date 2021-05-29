@@ -83,11 +83,6 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TablesHolder
                             notifyDataSetChanged();
                         }
                     }
-                    /*int position = getAdapterPosition();
-
-                    if(listener!= null && position!=RecyclerView.NO_POSITION){
-                        listener.onProductItemClick(mMenuList.get(position),position);
-                    }*/
                 }
             });
 

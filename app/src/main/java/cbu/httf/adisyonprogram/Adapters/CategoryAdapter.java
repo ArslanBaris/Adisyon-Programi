@@ -42,7 +42,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     @Override
     public void onBindViewHolder(@NonNull  CategoriesHolder holder, int position) {
         holder.txtMenuCategory.setText(String.valueOf(mCategoryList.get(position).getCategoryName()));
-
+        holder.txtMenuCategoryId.setText(String.valueOf(mCategoryList.get(position).getCategoryId()));
 
         if (selected_position == position) {
             holder.itemView.setBackgroundColor(Color.parseColor("#A1A1A1"));
@@ -59,11 +59,13 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
     public class CategoriesHolder extends RecyclerView.ViewHolder{
         TextView txtMenuCategory;
+        TextView txtMenuCategoryId;
         LinearLayout linearLayout;
 
         public CategoriesHolder(@NonNull View itemView) {
             super(itemView);
             txtMenuCategory=itemView.findViewById(R.id.category_item_txtCategory);
+            txtMenuCategoryId=itemView.findViewById(R.id.category_item_txtCategoryId);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
