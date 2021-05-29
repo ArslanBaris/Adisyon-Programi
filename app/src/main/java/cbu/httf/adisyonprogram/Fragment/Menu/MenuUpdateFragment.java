@@ -51,11 +51,11 @@ public class MenuUpdateFragment extends BottomSheetDialogFragment {
     ArrayList<Integer> categories;
     ArrayAdapter<Integer> arrayAdapter;
 
-    public MenuUpdateFragment(String token,  ArrayList<Integer> categories,int productId,int category) {
+    public MenuUpdateFragment(String token,  ArrayList<Integer> categories,int category,int productId) {
         this.categories=categories;
         this.token=token;
-        this.productId=productId;
         this.category=category;
+        this.productId=productId;
     }
 
     @Nullable
@@ -94,13 +94,10 @@ public class MenuUpdateFragment extends BottomSheetDialogFragment {
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerUpdateCategory.setAdapter(arrayAdapter);
 
-        if(productId!=0)
+        if(productId!=0 && category!=0 ){
             editTextID.setText(String.valueOf(productId));
-
-        if(category!=0)
             spinnerUpdateCategory.setSelection( categories.indexOf(category));
-
-
+        }
 
         imgClose = view.findViewById(R.id.update_menu_imgClose);
 
