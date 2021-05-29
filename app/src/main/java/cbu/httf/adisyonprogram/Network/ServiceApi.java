@@ -5,6 +5,7 @@ import java.util.List;
 import cbu.httf.adisyonprogram.data.model.CategoryModel;
 import cbu.httf.adisyonprogram.data.model.LoginRequest;
 import cbu.httf.adisyonprogram.data.model.MenuModel;
+import cbu.httf.adisyonprogram.data.model.OrderModel;
 import cbu.httf.adisyonprogram.data.model.ResultModel;
 import cbu.httf.adisyonprogram.data.model.TablesModel;
 import cbu.httf.adisyonprogram.data.model.LoginResponse;
@@ -45,6 +46,9 @@ public interface ServiceApi {
     @GET("category")
     Call<List<CategoryModel>> getCategories(@Header("token") String token);
 
+    @GET("siparis")
+    Call<List<OrderModel>> getOrderser(@Header("token") String token);
+
 
     //PUT Requests
 
@@ -64,6 +68,9 @@ public interface ServiceApi {
     Call<ResultModel> putCategory(@Header("token") String token,
                               @Body CategoryModel categoryModel);
 
+    @PUT("siparis")
+    Call<ResultModel> putOrder(@Header("token") String token,
+                                  @Body OrderModel orderModel);
 
 
     //POST Requests
@@ -96,6 +103,13 @@ public interface ServiceApi {
     Call<ResultModel> postCategory(@Header("token") String token,
                                    @Field("CategoryName") String categoryName);
 
+    @FormUrlEncoded
+    @POST("siparis")
+    Call<ResultModel> postOrder(@Header("token") String token,
+                                @Field("masaID") int masaID,
+                                @Field("urun_Adet") int urun_Adet,
+                                @Field("menuID") int menuID);
+
     //DELETE Requests
 
     @DELETE("user/delete/{ID}")
@@ -113,6 +127,10 @@ public interface ServiceApi {
     @DELETE("category/delete/{ID}")
     Call<ResultModel> deleteCategory(@Header("token") String token,
                                  @Path("ID") int ID);
+
+    @DELETE("siparis/delete/{ID}")
+    Call<ResultModel> deleteOrder(@Header("token") String token,
+                                     @Path("ID") int ID);
 
 
 
