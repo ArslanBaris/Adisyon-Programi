@@ -1,9 +1,12 @@
 package cbu.httf.adisyonprogram.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Notification;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -22,6 +25,7 @@ import cbu.httf.adisyonprogram.data.model.UserModel;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import static cbu.httf.adisyonprogram.Notification.App.CHANNEL_1_ID;
 
 public class UserTransactActivity extends AppCompatActivity {
 
@@ -33,12 +37,13 @@ public class UserTransactActivity extends AppCompatActivity {
     public   static String takentoken;
     public   String takenUserName;
     public  int userId=0;
-
+    public String name,surname;
+    private NotificationManagerCompat notificationManager;
     private void init(){
         btnAddUser=(Button)findViewById(R.id.btnUserAdd);
         btnUpdateUser=(Button)findViewById(R.id.btnUserUpdate);
         btnDeleteUser=(Button)findViewById(R.id.btnUserDelete);
-
+        notificationManager = NotificationManagerCompat.from(this);
         userUpdateFragment =  new UserUpdateFragment(takentoken,userId);
 
         recyclerView=(RecyclerView)findViewById(R.id.user_recyclerView);
@@ -72,6 +77,8 @@ public class UserTransactActivity extends AppCompatActivity {
             @Override
             public void onUserItemClick(UserModel userModel, int position) {
                 userId=userModel.getID();
+                name=userModel.getName();
+                surname=userModel.getSurname();
                 userUpdateFragment =  new UserUpdateFragment(takentoken,userId);
             }
         });
@@ -109,6 +116,19 @@ public class UserTransactActivity extends AppCompatActivity {
         userUpdateFragment.show(getSupportFragmentManager(),"UPDATE USER");
     }
 
+    public void sendOnChannel1() {
+        String title = "Deleted User";
+        String message = userId+" | "+name+" "+surname;
+        Notification notification = new NotificationCompat.Builder(this, CHANNEL_1_ID)
+                .setSmallIcon(R.drawable.ic_baseline_person_24)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                .build();
+        notificationManager.notify(1,notification);
+    }
+
     public void UserDelete(View v){
         Call<ResultModel> userDeleteCall = Service.getServiceApi().deleteUser(takentoken,userId);
         userDeleteCall.enqueue(new Callback<ResultModel>() {
@@ -116,6 +136,7 @@ public class UserTransactActivity extends AppCompatActivity {
             public void onResponse(Call<ResultModel> call, Response<ResultModel> response) {
                 if(response.isSuccessful()){
                     Toast.makeText(UserTransactActivity.this,"Transaction is successful.", Toast.LENGTH_LONG).show();
+                    sendOnChannel1();
                     recreate();
                 }else{
                     Toast.makeText(UserTransactActivity.this, "Request failed. "+response.code() , Toast.LENGTH_LONG).show();
