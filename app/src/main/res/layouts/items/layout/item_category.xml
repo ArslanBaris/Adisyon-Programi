@@ -3,14 +3,42 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:padding="8dp"
+    android:padding="5dp"
     android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/categoryImage"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
+        android:layout_width="30dp"
+        android:layout_centerVertical="true"
+        android:layout_height="30dp"
         app:srcCompat="@drawable/ic_category" />
+
+    <TextView
+        android:id="@+id/category_item_txtCategoryId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="-25dp"
+        android:layout_marginRight="-25dp"
+        android:layout_toStartOf="@+id/textView3"
+        android:layout_toLeftOf="@+id/textView3"
+        android:fontFamily="serif"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:textSize="17sp" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="30dp"
+        android:layout_toRightOf="@+id/categoryImage"
+        android:fontFamily="sans-serif-black"
+        android:text="|"
+        android:textColor="@color/black"
+        android:textSize="35sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/category_item_txtCategory"
@@ -18,7 +46,7 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@+id/categoryImage"
+        android:layout_toRightOf="@+id/textView3"
         android:fontFamily="serif"
         android:textColor="@color/black"
         android:textSize="17sp" />
