@@ -19,22 +19,22 @@
 
     <Button
         android:id="@+id/btnUserAdd"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="25dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="10dp"
         android:layout_marginRight="10dp"
         android:layout_toLeftOf="@+id/btnUserUpdate"
-        android:background="@drawable/ic_add"
+        android:background="@drawable/ic_person_add"
         android:onClick="FragmentUserAdd"
         app:backgroundTint="#000000" />
 
     <Button
         android:id="@+id/btnUserUpdate"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
         android:layout_toLeftOf="@+id/btnUserDelete"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="22dp"
         android:layout_marginEnd="10dp"
         android:layout_marginRight="10dp"
         android:background="@drawable/ic_update"
@@ -43,15 +43,15 @@
 
     <Button
         android:id="@+id/btnUserDelete"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="25dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="20dp"
         android:layout_alignParentTop="true"
         android:layout_marginRight="15dp"
         android:layout_marginEnd="5dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:background="@drawable/ic_delete"
+        android:background="@drawable/ic_person_remove"
         android:onClick="UserDelete"
         app:backgroundTint="#000000" />
 
