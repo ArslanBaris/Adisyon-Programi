@@ -51,5 +51,16 @@
         android:layout_height="wrap_content"
         android:text="___________________________________________" />
 
+<<<<<<< HEAD
+    <Button
+        android:id="@+id/buttonGoToSignUp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:onClick="btnGoToSignUp"
+        android:text="Sign Up" />
+=======
+>>>>>>> 31279f25f84f0d8126a845bd21ef790b4bcb26a8
 
 </LinearLayout>

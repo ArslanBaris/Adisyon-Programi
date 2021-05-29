@@ -6,7 +6,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -23,6 +25,9 @@ import cbu.httf.adisyonprogram.R;
 import cbu.httf.adisyonprogram.data.model.CategoryModel;
 import cbu.httf.adisyonprogram.data.model.Item;
 import cbu.httf.adisyonprogram.data.model.MenuModel;
+import cbu.httf.adisyonprogram.data.model.OrderList;
+import cbu.httf.adisyonprogram.data.model.OrderModel;
+import kotlin.time.FormatToDecimalsKt;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -31,41 +36,106 @@ public class MenuActivity extends AppCompatActivity {
     LinearLayout layout;
     RecyclerView rcv;
     RecyclerView rcv2;
-    List<Item> ItemAdapter_list = new ArrayList<>();
+    List<OrderList> ItemAdapter_list = new ArrayList<>();
     ItemListAdapter adapter_itemList;
-
+    public int Table_ID=0;
+    public static String takentoken;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
         layout = findViewById(R.id.category);
+        Intent takenIntent = getIntent();
+        takentoken=takenIntent.getStringExtra("token");
+        getCategories();
 
-        for (int i = 1; i <= 15; i++) {
-            final Button button = new Button(this);
+
+    }
+
+    void  abc(ArrayList<CategoryModel> categoryModels){
+        for (CategoryModel categoryModel:categoryModels) {
+
+
+            final Button button = new Button(getApplicationContext());
             button.setLayoutParams(new LinearLayout.LayoutParams(370, 150));
-            button.setId(i);
-            button.setText("B " + i);
+            button.setId(categoryModel.getCategoryId());
+            button.setText(categoryModel.getCategoryName());
             button.setOnClickListener(this::btnCategory_Click);
             layout.addView(button);
+
+
         }
+
+    }
+
+    public void getProducts(int id){
+        Call<List<MenuModel>> listCall=Service.getServiceApi().getMenu(takentoken);
+        listCall.enqueue(new Callback<List<MenuModel>>() {
+            @Override
+            public void onResponse(Call<List<MenuModel>> call, Response<List<MenuModel>> response) {
+                if(response.isSuccessful()){
+                    ArrayList<MenuModel> productsModelBody = new ArrayList<>();
+                    ArrayList<OrderList> productsModel = new ArrayList<>();
+                    productsModelBody =(ArrayList<MenuModel>) response.body();
+                    for(MenuModel Item : productsModelBody)
+                    {
+                        if (Item.getKategori() == id)
+                            productsModel.add(new OrderList(Item.getAd(), "0", Item.getID(), Table_ID));
+                    }
+                    adapter_itemList = new ItemListAdapter(productsModel);
+                    rcv = findViewById(R.id.Items);
+                    rcv.setHasFixedSize(true);
+                    rcv.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                    rcv.setAdapter(adapter_itemList);
+
+                }else{
+                    Toast.makeText(MenuActivity.this, "Request failed. "+response.code() , Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<MenuModel>> call, Throwable t) {
+                Toast.makeText(MenuActivity.this, "Request failed. "+t.getMessage() , Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+    public void getCategories(){
+
+
+        Call<List<CategoryModel>> categoriesModelCall = Service.getServiceApi().getCategories(takentoken);
+
+        categoriesModelCall.enqueue(new Callback<List<CategoryModel>>() {
+            @Override
+            public void onResponse(Call<List<CategoryModel>> call, Response<List<CategoryModel>> response) {
+                if(response.isSuccessful()){
+                    ArrayList<CategoryModel> categoriesModels = new ArrayList<>();
+                    categoriesModels =(ArrayList<CategoryModel>) response.body();
+                    abc(categoriesModels);
+
+                }else{
+                    Toast.makeText(MenuActivity.this, "Request failed. "+response.code() , Toast.LENGTH_LONG).show();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<List<CategoryModel>> call, Throwable t) {
+                Toast.makeText(MenuActivity.this, "Request failed. "+t.getMessage() , Toast.LENGTH_LONG).show();
+            }
+        });
     }
     public void btnCategory_Click(View view) {
         int btn_id = view.getId();
-        List<Item> ItemList = new ArrayList<>();
-        for (int i = 1; i <= btn_id; i++) {
-            ItemList.add(new Item(btn_id + "test" + i, "0"));
-        }
-        adapter_itemList = new ItemListAdapter(ItemList);
-        rcv = findViewById(R.id.Items);
-        rcv.setHasFixedSize(true);
-        rcv.setLayoutManager(new LinearLayoutManager(this));
-        rcv.setAdapter(adapter_itemList);
+        getProducts(btn_id);
+
     }
 
     public void btnOkClick(View view) {
-        Intent intent = new Intent(getApplicationContext(), TableItemActivity.class);
-        startActivity(intent);
         this.finish();
+        List<OrderModel> orderModels_list = new ArrayList<>();
+        for (OrderList Item : ItemAdapter_list) {
+            orderModels_list.add(new OrderModel(Item.getTable_ID(),Integer.valueOf(Item.getItem_Piece()),Item.getItem_ID()));
+        }
     }
 
     public void btnAdd_Click(View view) {
@@ -77,8 +147,10 @@ public class MenuActivity extends AppCompatActivity {
         for (int i = ItemAdapter_list.size() - 1; i >= 0; i--) {
             if (Integer.valueOf(ItemAdapter_list.get(i).getItem_Piece()) == 0)
                 ItemAdapter_list.remove(i);
+            System.out.println(ItemAdapter_list.get(i).getItem_ID()+" "+ItemAdapter_list.get(i).getTable_ID());
         }
         rcv2.setAdapter(new ItemAdapter(ItemAdapter_list));
+
     }
 
 
