@@ -43,9 +43,11 @@ public class TableUpdateFragment extends BottomSheetDialogFragment {
 
     private NotificationManagerCompat notificationManager;
 
-    public TableUpdateFragment(String token,int tableId) {
-        this.token=token;
-        this.tableId=tableId;
+    public TableUpdateFragment(String token,int tableId, String tableName, int tableNumber) {
+        this.tableId = tableId;
+        this.tableName = tableName;
+        this.tableNumber = tableNumber;
+        this.token = token;
     }
 
     @Nullable
