@@ -48,6 +48,9 @@ public class SignUpActivity extends AppCompatActivity {
     private NotificationManagerCompat notificationManager;
 
     public  void init(){
+        Intent takenIntent = getIntent();
+        takentoken=takenIntent.getStringExtra("token");
+
         editTextUserName=(EditText)findViewById(R.id.etUsername);
         editTextName=(EditText)findViewById(R.id.etName);
         editTextSurname=(EditText)findViewById(R.id.etSurname);
@@ -59,7 +62,7 @@ public class SignUpActivity extends AppCompatActivity {
         notificationManager = NotificationManagerCompat.from(this);
     }
 
-    public void sendOnChannel1(String name,String surname) {
+    public void sendOnChannel1(String name,String surname) {    // Create notification
         String title = "Added User";
         String message = name+" "+surname;
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_1_ID)
@@ -77,8 +80,6 @@ public class SignUpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
-        Intent takenIntent = getIntent();
-        takentoken=takenIntent.getStringExtra("token");
         init();
 
         ((Button)findViewById(R.id.btnSignUp)).setOnClickListener(new View.OnClickListener() {
@@ -125,7 +126,7 @@ public class SignUpActivity extends AppCompatActivity {
                             }
                         });
                         }else{
-                        Toast.makeText(SignUpActivity.this, "Eşleşmeyen şifre.",Toast.LENGTH_LONG).show();
+                        Toast.makeText(SignUpActivity.this, "Those passwords didn’t match.",Toast.LENGTH_LONG).show();
                         }
 
                 }else {
