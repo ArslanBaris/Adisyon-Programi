@@ -1,9 +1,12 @@
 package cbu.httf.adisyonprogram.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Notification;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -14,20 +17,17 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import cbu.httf.adisyonprogram.Adapters.CategoryAdapter;
 import cbu.httf.adisyonprogram.Adapters.TableAdapter;
-import cbu.httf.adisyonprogram.Fragment.Category.CategoryUpdateFragment;
 import cbu.httf.adisyonprogram.Fragment.Table.TableAddFragment;
 import cbu.httf.adisyonprogram.Fragment.Table.TableUpdateFragment;
 import cbu.httf.adisyonprogram.Network.Service;
 import cbu.httf.adisyonprogram.R;
-import cbu.httf.adisyonprogram.data.model.CategoryModel;
 import cbu.httf.adisyonprogram.data.model.ResultModel;
 import cbu.httf.adisyonprogram.data.model.TablesModel;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
+import static cbu.httf.adisyonprogram.Notification.App.CHANNEL_1_ID;
 
 public class TableTransactActivity extends AppCompatActivity  {
 
@@ -39,25 +39,39 @@ public class TableTransactActivity extends AppCompatActivity  {
 
     private String takenUserName;
     public   static String takentoken;
-
+    private NotificationManagerCompat notificationManager;
     public  int tableId=0;
+    public String tableName;
+    public int tableNumber;
 
     private void init(){
         btnAddTable=(Button)findViewById(R.id.btnTableAdd);
         btnUpdateTable=(Button)findViewById(R.id.btnTableUpdate);
         btnDeleteTable=(Button)findViewById(R.id.btnTableDelete);
-
+        notificationManager = NotificationManagerCompat.from(this);
         tableAddFragment =  new TableAddFragment(takentoken);
         tableUpdateFragment =  new TableUpdateFragment(takentoken,tableId);
         recyclerView=(RecyclerView)findViewById(R.id.table_recyclerView);
+
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        getSupportActionBar().setTitle("Table Transact");
-       // getSupportActionBar().setIcon(R.drawable.ic_table);
+        /*getSupportActionBar().setTitle("Table Transact");
+        getSupportActionBar().setIcon(getDrawable(R.drawable.table_3));*/
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_table_transact);
+
+        /*ActionBar actionBar = getSupportActionBar();
+
+        Drawable drawable;
+        Resources resources = getResources();
+
+        //API Level 21
+        drawable = resources.getDrawable(R.drawable.table_3,null);
+       //actionBar.setTitle("Table Transact");
+        actionBar.setIcon(drawable);
+        actionBar.setDisplayShowHomeEnabled(true);*/
 
         Intent takenIntent = getIntent();
         takenUserName = takenIntent.getStringExtra("userName");
@@ -81,6 +95,8 @@ public class TableTransactActivity extends AppCompatActivity  {
             @Override
             public void onTableItemClick(TablesModel tablesModel, int position) {
                 tableId=tablesModel.getID();
+                tableName=tablesModel.getAd();
+                tableNumber=tablesModel.getTableNo();
                 tableUpdateFragment =  new TableUpdateFragment(takentoken,tableId);
             }
         });
@@ -117,6 +133,19 @@ public class TableTransactActivity extends AppCompatActivity  {
         tableUpdateFragment.show(getSupportFragmentManager(),"UPDATE TABLE");
     }
 
+    private void sendOnChannel1() {
+        String title = "Deleted Table";
+        String message = String.valueOf(tableId)+" | "+tableName+": "+String.valueOf(tableNumber);
+        Notification notification = new NotificationCompat.Builder(this, CHANNEL_1_ID)
+                .setSmallIcon(R.drawable.ic_table)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                .build();
+        notificationManager.notify(1,notification);
+    }
+
     public void TableDelete(View v){
         Call<ResultModel> tableDeleteCall = Service.getServiceApi().deleteTable(takentoken,tableId);
         tableDeleteCall.enqueue(new Callback<ResultModel>() {
@@ -124,6 +153,7 @@ public class TableTransactActivity extends AppCompatActivity  {
             public void onResponse(Call<ResultModel> call, Response<ResultModel> response) {
                 if(response.isSuccessful()){
                     Toast.makeText(TableTransactActivity.this,"Transaction is successful.", Toast.LENGTH_LONG).show();
+                    sendOnChannel1();
                     recreate();
                 }else{
                     Toast.makeText(TableTransactActivity.this, "Request failed. "+response.code() , Toast.LENGTH_LONG).show();
