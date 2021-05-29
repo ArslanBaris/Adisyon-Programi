@@ -10,7 +10,7 @@
         android:id="@+id/table_menu_image"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:src="@drawable/ic_table_3"
+        android:src="@drawable/ic_tablee"
         android:scaleType="fitXY"/>
 
     <TextView
