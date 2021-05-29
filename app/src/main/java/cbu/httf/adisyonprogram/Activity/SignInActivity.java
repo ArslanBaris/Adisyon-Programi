@@ -27,7 +27,7 @@ public class SignInActivity extends AppCompatActivity {
 
     private EditText editTextLoginEmail;
     private EditText editTextLoginPassword;
-    private TextView textView;
+
     private String eMail;
     private String password;
     private  static  String token;
@@ -41,13 +41,10 @@ public class SignInActivity extends AppCompatActivity {
 
         editTextLoginEmail=(EditText)findViewById(R.id.editTextLoginEmail);
         editTextLoginPassword=(EditText)findViewById(R.id.editTextLoginPassword);
-        textView=(TextView)findViewById(R.id.textView);
+
 
     }
 
-   /* public void btnGoToSignUp(View v){
-        startActivity(new Intent(SignInActivity.this,SignUpActivity.class));
-    }*/
     public void btnSignIn(View v){
 
         eMail = editTextLoginEmail.getText().toString();
@@ -57,7 +54,6 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     public void login(String eMail,String password){
-
 
         LoginRequest loginRequest = new LoginRequest();
         loginRequest.seteMail(eMail);
@@ -75,21 +71,18 @@ public class SignInActivity extends AppCompatActivity {
                    LoginResponse loginResponse = response.body();
                    token = response.body().getToken();
 
-
                    Toast.makeText(SignInActivity.this,"Welcome "+loginResponse.getResult().get("name"),Toast.LENGTH_SHORT).show();
 
                    if(loginResponse.getResult().get("UserTypeName").equals("Root")||loginResponse.getResult().get("UserTypeName").equals("Administrator")){
 
                        startActivity(new Intent(SignInActivity.this,AdminActivity.class).putExtra("token",token).
                                putExtra("userName",loginResponse.getResult().get("userName")));
-
                    }else if(loginResponse.getResult().get("UserTypeName").equals("Manager")) {
 
-                       startActivity(new Intent(SignInActivity.this,TablesActivity.class).putExtra("token",token).
+                       startActivity(new Intent(SignInActivity.this,TablesActivity.class).
+                               putExtra("token",token).
                                putExtra("userName",loginResponse.getResult().get("userName")));
-
                    }
-
                }else{
                    Toast.makeText(SignInActivity.this,"Login Failed",Toast.LENGTH_LONG).show();
                }
@@ -97,39 +90,10 @@ public class SignInActivity extends AppCompatActivity {
 
            @Override
            public void onFailure(Call<LoginResponse> call, Throwable t) {
-
+               Toast.makeText(SignInActivity.this,"Failure: "+t.getMessage(),Toast.LENGTH_LONG).show();
            }
        });
 
     }
 
-
-    public void getUsers(){
-        Call<UserModel> userModelCall = Service.getServiceApi().getUser(token);
-
-        userModelCall.enqueue(new Callback<UserModel>() {
-
-            @Override
-            public void onResponse(Call<UserModel> call, Response<UserModel> response) {
-                if(response.isSuccessful()){
-                    Toast.makeText(SignInActivity.this, "Başarılı", Toast.LENGTH_LONG).show();
-                    UserModel users = response.body();
-
-                    eMail = "";
-                    eMail += "Ad: "+users.getName()+"\n";
-                    eMail += "UseType : "+users.getUserTypeName();
-                    textView.setText(eMail);
-                    Toast.makeText(SignInActivity.this, eMail, Toast.LENGTH_LONG).show();
-
-                }else{
-                    Toast.makeText(SignInActivity.this,"Veri alındı",Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<UserModel> call, Throwable t) {
-
-            }
-        });
-    }
 }
