@@ -41,9 +41,10 @@ public class CategoryUpdateFragment extends BottomSheetDialogFragment {
 
     private String token;
 
-    public CategoryUpdateFragment(String token,int categoryId) {
+    public CategoryUpdateFragment(String token,int categoryId, String categoryName) {
         this.token=token;
         this.categoryId=categoryId;
+        this.categoryName=categoryName;
     }
 
     @Nullable
@@ -74,8 +75,11 @@ public class CategoryUpdateFragment extends BottomSheetDialogFragment {
         editTextCategoryName=(EditText)view.findViewById(R.id.editTextUpdateCategoryName);
         notificationManager = NotificationManagerCompat.from(getContext());
 
-        if(categoryId!=0)
+        if(categoryId!=0 && categoryName!=null){
             editTextCategoryID.setText(String.valueOf(categoryId));
+            editTextCategoryName.setText(categoryName);
+        }
+
 
         imgClose = view.findViewById(R.id.update_category_imgClose);
 
