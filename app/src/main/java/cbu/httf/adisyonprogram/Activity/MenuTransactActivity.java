@@ -1,12 +1,14 @@
 package cbu.httf.adisyonprogram.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Notification;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -29,6 +31,7 @@ import cbu.httf.adisyonprogram.data.model.ResultModel;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import static cbu.httf.adisyonprogram.Notification.App.CHANNEL_1_ID;
 
 public class MenuTransactActivity extends AppCompatActivity {
 
@@ -44,11 +47,12 @@ public class MenuTransactActivity extends AppCompatActivity {
     public static String takentoken;
     public  int categoryId=0;
     public  int productId=0;
+    public String productName,categoryName;
 
     private RecyclerView recyclerViewCategory;
     private RecyclerView recyclerViewProduct;
 
-
+    private NotificationManagerCompat notificationManager;
 
     static ArrayList<Integer> categories;
 
@@ -56,7 +60,7 @@ public class MenuTransactActivity extends AppCompatActivity {
         btnAddMenu=findViewById(R.id.btnMenuAdd);
         btnUpdateMenu=findViewById(R.id.btnMenuUpdate);
         btnDeleteMenu=findViewById(R.id.btnMenuDelete);
-
+        notificationManager = NotificationManagerCompat.from(this);
         categories=new ArrayList<>();
 
         categoryUpdateFragment =  new CategoryUpdateFragment(takentoken,categoryId);
@@ -79,8 +83,8 @@ public class MenuTransactActivity extends AppCompatActivity {
 
         getCategories();
 
-        menuAddFragment =  new MenuAddFragment(takentoken,categories);
-        menuUpdateFragment =  new MenuUpdateFragment(takentoken,categories,productId);
+        menuAddFragment =  new MenuAddFragment(takentoken,categories,categoryId);
+        menuUpdateFragment =  new MenuUpdateFragment(takentoken,categories,productId,categoryId);
         categoryAddFragment =  new CategoryAddFragment(takentoken);
 
     }
@@ -96,7 +100,9 @@ public class MenuTransactActivity extends AppCompatActivity {
             @Override
             public void onCategoryItemClick(CategoryModel categoryModel, int position) {
                 categoryId=categoryModel.getCategoryId();
+                categoryName=categoryModel.getCategoryName();
                 categoryUpdateFragment =  new CategoryUpdateFragment(takentoken,categoryId);
+                menuAddFragment =  new MenuAddFragment(takentoken,categories,categoryId);
                 getProducts();
             }
         });
@@ -174,7 +180,8 @@ public class MenuTransactActivity extends AppCompatActivity {
             @Override
             public void onProductItemClick(MenuModel menuModel, int position) {
                 productId=menuModel.getID();
-                menuUpdateFragment =  new MenuUpdateFragment(takentoken,categories,productId);
+                productName=menuModel.getAd();
+                menuUpdateFragment =  new MenuUpdateFragment(takentoken,categories,productId,categoryId);
 
             }
         });
@@ -189,6 +196,19 @@ public class MenuTransactActivity extends AppCompatActivity {
         categoryUpdateFragment.show(getSupportFragmentManager(),"UPDATE CATEGORY");
     }
 
+    public void sendOnChannel1Category() {
+        String title = "Deleted Category";
+        String message = categoryId+" | "+categoryName;
+        Notification notification = new NotificationCompat.Builder(this, CHANNEL_1_ID)
+                .setSmallIcon(R.drawable.ic_category)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                .build();
+        notificationManager.notify(1,notification);
+    }
+
     public void CategoryDelete(View v){
 
         Call<ResultModel> deleteCall = Service.getServiceApi().deleteCategory(takentoken,categoryId);
@@ -197,6 +217,7 @@ public class MenuTransactActivity extends AppCompatActivity {
             public void onResponse(Call<ResultModel> call, Response<ResultModel> response) {
                 if(response.isSuccessful()){
                     Toast.makeText(MenuTransactActivity.this,"Transaction is successful.", Toast.LENGTH_LONG).show();
+                    sendOnChannel1Category();
                     recreate();
                 }else{
                     Toast.makeText(MenuTransactActivity.this, "Request failed. "+response.code() , Toast.LENGTH_LONG).show();
@@ -218,6 +239,19 @@ public class MenuTransactActivity extends AppCompatActivity {
         menuUpdateFragment.show(getSupportFragmentManager(),"UPDATE MENU");
     }
 
+    public void sendOnChannel1Product() {
+        String title = "Deleted Product";
+        String message = productId+" | "+productName;
+        Notification notification = new NotificationCompat.Builder(this, CHANNEL_1_ID)
+                .setSmallIcon(R.drawable.ic_product)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                .build();
+        notificationManager.notify(1,notification);
+    }
+
     public void MenuDelete(View v){
 
         Call<ResultModel> deleteCall = Service.getServiceApi().deleteMenu(takentoken,productId);
@@ -226,6 +260,7 @@ public class MenuTransactActivity extends AppCompatActivity {
             public void onResponse(Call<ResultModel> call, Response<ResultModel> response) {
                 if(response.isSuccessful()){
                     Toast.makeText(MenuTransactActivity.this,"Transaction is successful.", Toast.LENGTH_LONG).show();
+                    sendOnChannel1Product();
                     recreate();
                 }else{
                     Toast.makeText(MenuTransactActivity.this, "Request failed. "+response.code() , Toast.LENGTH_LONG).show();
