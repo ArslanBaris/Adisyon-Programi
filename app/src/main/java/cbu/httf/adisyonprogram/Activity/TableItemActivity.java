@@ -14,30 +14,34 @@ import java.util.List;
 import cbu.httf.adisyonprogram.Adapters.ItemAdapter;
 import cbu.httf.adisyonprogram.R;
 import cbu.httf.adisyonprogram.data.model.Item;
+import cbu.httf.adisyonprogram.data.model.OrderList;
 
 public class TableItemActivity extends AppCompatActivity {
     RecyclerView rcv;
-    List<Item> ItemList = new ArrayList<>();
+    List<OrderList> ItemList = new ArrayList<>();
     ItemAdapter adapterItem;
+    String token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Intent takenIntent = getIntent();
+        token=takenIntent.getStringExtra("token");
+
         setContentView(R.layout.activity_table_item);
         rcv = findViewById(R.id.Rcv_Items);
         rcv.setHasFixedSize(true);
         rcv.setLayoutManager(new LinearLayoutManager(this));
-        for (int i = 1; i <= 10; i++) {
-            ItemList.add(new Item("test" + i, "10"));
-        }
         adapterItem = new ItemAdapter(ItemList);
         rcv.setAdapter(adapterItem);
     }
 
     public void btnManuClick(View view) {
         Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
+        intent.putExtra("token",token);
         startActivity(intent);
         this.finish();
+
     }
 
     public void btnPayClick(View view) {
