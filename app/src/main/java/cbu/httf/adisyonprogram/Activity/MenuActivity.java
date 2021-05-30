@@ -1,9 +1,12 @@
 package cbu.httf.adisyonprogram.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Notification;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -33,6 +36,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static cbu.httf.adisyonprogram.Notification.App.CHANNEL_1_ID;
+
 public class MenuActivity extends AppCompatActivity {
     LinearLayout layout;
     RecyclerView rcv;
@@ -42,10 +47,13 @@ public class MenuActivity extends AppCompatActivity {
     public int Table_ID;
     public static String takentoken;
     public String name,number;
+    private NotificationManagerCompat notificationManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+        notificationManager = NotificationManagerCompat.from(this);
         layout = findViewById(R.id.category);
         Intent takenIntent = getIntent();
         takentoken=takenIntent.getStringExtra("token");
@@ -59,16 +67,12 @@ public class MenuActivity extends AppCompatActivity {
 
     void  abc(ArrayList<CategoryModel> categoryModels){
         for (CategoryModel categoryModel:categoryModels) {
-
-
             final Button button = new Button(getApplicationContext());
             button.setLayoutParams(new LinearLayout.LayoutParams(370, 150));
             button.setId(categoryModel.getCategoryId());
             button.setText(categoryModel.getCategoryName());
             button.setOnClickListener(this::btnCategory_Click);
             layout.addView(button);
-
-
         }
 
     }
@@ -134,7 +138,18 @@ public class MenuActivity extends AppCompatActivity {
         getProducts(btn_id);
 
     }
-
+    public void sendOnChannel1Product() {
+        String title = "Add Product";
+        String message =name+" "+number+" "+"products added" ;
+        Notification notification = new NotificationCompat.Builder(this, CHANNEL_1_ID)
+                .setSmallIcon(R.drawable.ic_product_2)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                .build();
+        notificationManager.notify(1,notification);
+    }
     public void btnOkClick(View view) {
         startActivity(new Intent(MenuActivity.this,TableItemActivity.class).
                 putExtra("token",takentoken).
@@ -146,6 +161,8 @@ public class MenuActivity extends AppCompatActivity {
             orderModels_list.add(new OrderModel(Item.getTable_ID(),Integer.valueOf(Item.getItem_Piece()),Item.getItem_ID()));
         }
         postOrder(orderModels_list);
+        sendOnChannel1Product();
+        this.finish();
     }
 
     public void postOrder(List<OrderModel> orderModelList){

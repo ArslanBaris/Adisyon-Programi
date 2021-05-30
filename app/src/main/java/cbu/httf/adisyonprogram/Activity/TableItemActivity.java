@@ -1,9 +1,12 @@
 package cbu.httf.adisyonprogram.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Notification;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -26,6 +29,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static cbu.httf.adisyonprogram.Notification.App.CHANNEL_1_ID;
+
 public class TableItemActivity extends AppCompatActivity {
     RecyclerView rcv;
 
@@ -35,12 +40,13 @@ public class TableItemActivity extends AppCompatActivity {
     int table_ID ;
 
     TextView tv_Name;
+    private NotificationManagerCompat notificationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_table_item);
-
+        notificationManager = NotificationManagerCompat.from(this);
         Intent takenIntent = getIntent();
         token=takenIntent.getStringExtra("token");
         name = takenIntent.getStringExtra("tableName");
@@ -126,8 +132,23 @@ public class TableItemActivity extends AppCompatActivity {
 
     }
 
+    public void sendOnChannel1Product() {
+        String title = "Pay Product";
+        String message = name+" "+number+" "+"All products pay" ;
+        Notification notification = new NotificationCompat.Builder(this, CHANNEL_1_ID)
+                .setSmallIcon(R.drawable.ic_product_2)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                .build();
+        notificationManager.notify(1,notification);
+    }
+
     public void btnPayClick(View view) {
         getOrders(false);
+        sendOnChannel1Product();
+        this.finish();
     }
 
     public  void deleteOrders(ArrayList<Integer> orderId){
