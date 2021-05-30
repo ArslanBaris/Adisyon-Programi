@@ -47,8 +47,11 @@ public interface ServiceApi {
     Call<List<CategoryModel>> getCategories(@Header("token") String token);
 
     @GET("siparis")
-    Call<List<OrderModel>> getOrderser(@Header("token") String token);
+    Call<List<OrderModel>> getOrders(@Header("token") String token);
 
+    @GET("menu/{ID}")
+    Call<MenuModel> getProduct(@Header("token") String token,
+                               @Path("ID") int ID);
 
     //PUT Requests
 
@@ -107,8 +110,9 @@ public interface ServiceApi {
     @POST("siparis")
     Call<ResultModel> postOrder(@Header("token") String token,
                                 @Field("masaID") int masaID,
-                                @Field("urun_Adet") int urun_Adet,
+                                @Field("urun_adet") int urun_Adet,
                                 @Field("menuID") int menuID);
+
 
     //DELETE Requests
 
