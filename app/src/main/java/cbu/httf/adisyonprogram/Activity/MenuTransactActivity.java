@@ -57,6 +57,9 @@ public class MenuTransactActivity extends AppCompatActivity {
     static ArrayList<Integer> categories;
 
     private void init(){
+        getSupportActionBar().setIcon(R.drawable.ic_menu_transact);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
         btnAddMenu=findViewById(R.id.btnMenuAdd);
         btnUpdateMenu=findViewById(R.id.btnMenuUpdate);
         btnDeleteMenu=findViewById(R.id.btnMenuDelete);
@@ -246,7 +249,7 @@ public class MenuTransactActivity extends AppCompatActivity {
         String title = "Deleted Product";
         String message = productId+" | "+productName;
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_1_ID)
-                .setSmallIcon(R.drawable.ic_product)
+                .setSmallIcon(R.drawable.ic_product_2)
                 .setContentTitle(title)
                 .setContentText(message)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)

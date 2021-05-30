@@ -4,20 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import java.io.IOException;
 
 import cbu.httf.adisyonprogram.Network.Service;
 import cbu.httf.adisyonprogram.R;
 import cbu.httf.adisyonprogram.data.model.LoginRequest;
 import cbu.httf.adisyonprogram.data.model.LoginResponse;
-import cbu.httf.adisyonprogram.data.model.UserModel;
-import okhttp3.ResponseBody;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -34,7 +28,7 @@ public class SignInActivity extends AppCompatActivity {
 
     public void init(){
         getSupportActionBar().setTitle("Sign In");  //ActionBar Text
-        getSupportActionBar().setIcon(R.drawable.login);
+        getSupportActionBar().setIcon(R.drawable.ic_login);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         editTextLoginEmail=(EditText)findViewById(R.id.editTextLoginEmail);

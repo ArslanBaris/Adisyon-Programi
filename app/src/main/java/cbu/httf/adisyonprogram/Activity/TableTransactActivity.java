@@ -47,7 +47,7 @@ public class TableTransactActivity extends AppCompatActivity  {
 
     private void init(){
         getSupportActionBar().setTitle("Table Transact");  //ActionBar Text
-        getSupportActionBar().setIcon(R.drawable.login);
+        getSupportActionBar().setIcon(R.drawable.ic_table_4);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         Intent takenIntent = getIntent();
         takenUserName = takenIntent.getStringExtra("userName");

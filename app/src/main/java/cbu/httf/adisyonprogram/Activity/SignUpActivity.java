@@ -48,6 +48,9 @@ public class SignUpActivity extends AppCompatActivity {
     private NotificationManagerCompat notificationManager;
 
     public  void init(){
+        getSupportActionBar().setIcon(R.drawable.ic_sign_up);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
         Intent takenIntent = getIntent();
         takentoken=takenIntent.getStringExtra("token");
 

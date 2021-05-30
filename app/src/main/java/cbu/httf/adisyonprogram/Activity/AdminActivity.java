@@ -18,6 +18,8 @@ public class AdminActivity extends AppCompatActivity {
 
     public void init(){
         getSupportActionBar().setTitle("Admin Page");   //ActionBar Text
+        getSupportActionBar().setIcon(R.drawable.ic_transact);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
         txtUser=(TextView)findViewById(R.id.txtAdminUserName);
 
         Intent takenIntent = getIntent();
