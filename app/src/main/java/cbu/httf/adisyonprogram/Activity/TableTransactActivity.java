@@ -133,24 +133,28 @@ public class TableTransactActivity extends AppCompatActivity  {
     }
 
     public void TableDelete(View v){
-        Call<ResultModel> tableDeleteCall = Service.getServiceApi().deleteTable(takentoken,tableId);  // Submitted ID to be deleted.
-        tableDeleteCall.enqueue(new Callback<ResultModel>() {
-            @Override
-            public void onResponse(Call<ResultModel> call, Response<ResultModel> response) {
-                if(response.isSuccessful()){
-                    Toast.makeText(TableTransactActivity.this,"Transaction is successful.", Toast.LENGTH_LONG).show();
-                    sendOnChannel1();   // Call Notification
-                    recreate();     // Rebuild activity
-                }else{
-                    Toast.makeText(TableTransactActivity.this, "Request failed. "+response.code() , Toast.LENGTH_LONG).show();
+        if(tableId==0)                   //if not selected, cannot delete
+            Toast.makeText(TableTransactActivity.this,"Choose table", Toast.LENGTH_LONG).show();
+        else {
+            Call<ResultModel> tableDeleteCall = Service.getServiceApi().deleteTable(takentoken, tableId);  // Submitted ID to be deleted.
+            tableDeleteCall.enqueue(new Callback<ResultModel>() {
+                @Override
+                public void onResponse(Call<ResultModel> call, Response<ResultModel> response) {
+                    if (response.isSuccessful()) {
+                        Toast.makeText(TableTransactActivity.this, "Transaction is successful.", Toast.LENGTH_LONG).show();
+                        sendOnChannel1();   // Call Notification
+                        recreate();     // Rebuild activity
+                    } else {
+                        Toast.makeText(TableTransactActivity.this, "Request failed. " + response.code(), Toast.LENGTH_LONG).show();
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<ResultModel> call, Throwable t) {
-                Toast.makeText(TableTransactActivity.this, "Request failed. "+t.getMessage() , Toast.LENGTH_LONG).show();
-            }
-        });
+                @Override
+                public void onFailure(Call<ResultModel> call, Throwable t) {
+                    Toast.makeText(TableTransactActivity.this, "Request failed. " + t.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            });
+        }
     }
 
 }

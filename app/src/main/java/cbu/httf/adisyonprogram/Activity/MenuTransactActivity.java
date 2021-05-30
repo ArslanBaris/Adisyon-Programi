@@ -209,25 +209,28 @@ public class MenuTransactActivity extends AppCompatActivity {
     }
 
     public void CategoryDelete(View v){     // for delete the selected item
-
-        Call<ResultModel> deleteCall = Service.getServiceApi().deleteCategory(takentoken,categoryId);
-        deleteCall.enqueue(new Callback<ResultModel>() {
-            @Override
-            public void onResponse(Call<ResultModel> call, Response<ResultModel> response) {
-                if(response.isSuccessful()){
-                    Toast.makeText(MenuTransactActivity.this,"Transaction is successful.", Toast.LENGTH_LONG).show();
-                    sendOnChannel1Category();
-                    recreate();
-                }else{
-                    Toast.makeText(MenuTransactActivity.this, "Request failed. "+response.code() , Toast.LENGTH_LONG).show();
+        if(categoryId==0)
+            Toast.makeText(MenuTransactActivity.this,"Choose category", Toast.LENGTH_LONG).show();
+        else {
+            Call<ResultModel> deleteCall = Service.getServiceApi().deleteCategory(takentoken, categoryId);
+            deleteCall.enqueue(new Callback<ResultModel>() {
+                @Override
+                public void onResponse(Call<ResultModel> call, Response<ResultModel> response) {
+                    if (response.isSuccessful()) {
+                        Toast.makeText(MenuTransactActivity.this, "Transaction is successful.", Toast.LENGTH_LONG).show();
+                        sendOnChannel1Category();
+                        recreate();
+                    } else {
+                        Toast.makeText(MenuTransactActivity.this, "Request failed. " + response.code(), Toast.LENGTH_LONG).show();
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<ResultModel> call, Throwable t) {
-                Toast.makeText(MenuTransactActivity.this, "Failure. "+t.getMessage() , Toast.LENGTH_LONG).show();
-            }
-        });
+                @Override
+                public void onFailure(Call<ResultModel> call, Throwable t) {
+                    Toast.makeText(MenuTransactActivity.this, "Failure. " + t.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            });
+        }
     }
 
     public void FragmentMenuAdd(View v){
@@ -255,25 +258,29 @@ public class MenuTransactActivity extends AppCompatActivity {
     }
 
     public void MenuDelete(View v){     // for delete the selected item
+        if(productId==0)                //if not selected, cannot delete
+            Toast.makeText(MenuTransactActivity.this,"Choose product", Toast.LENGTH_LONG).show();
+        else{
+            Call<ResultModel> deleteCall = Service.getServiceApi().deleteMenu(takentoken,productId);
+            deleteCall.enqueue(new Callback<ResultModel>() {
+                 @Override
+                 public void onResponse(Call<ResultModel> call, Response<ResultModel> response) {
+                      if(response.isSuccessful()){
+                           Toast.makeText(MenuTransactActivity.this,"Transaction is successful.", Toast.LENGTH_LONG).show();
+                            sendOnChannel1Product();
+                            recreate();
+                      }else{
+                            Toast.makeText(MenuTransactActivity.this, "Request failed. "+response.code() , Toast.LENGTH_LONG).show();
+                      }
+                 }
 
-        Call<ResultModel> deleteCall = Service.getServiceApi().deleteMenu(takentoken,productId);
-        deleteCall.enqueue(new Callback<ResultModel>() {
-            @Override
-            public void onResponse(Call<ResultModel> call, Response<ResultModel> response) {
-                if(response.isSuccessful()){
-                    Toast.makeText(MenuTransactActivity.this,"Transaction is successful.", Toast.LENGTH_LONG).show();
-                    sendOnChannel1Product();
-                    recreate();
-                }else{
-                    Toast.makeText(MenuTransactActivity.this, "Request failed. "+response.code() , Toast.LENGTH_LONG).show();
-                }
-            }
+                 @Override
+                 public void onFailure(Call<ResultModel> call, Throwable t) {
+                     Toast.makeText(MenuTransactActivity.this, "Failure. "+t.getMessage() , Toast.LENGTH_LONG).show();
+                 }
+            });
 
-            @Override
-            public void onFailure(Call<ResultModel> call, Throwable t) {
-                Toast.makeText(MenuTransactActivity.this, "Failure. "+t.getMessage() , Toast.LENGTH_LONG).show();
-            }
-        });
+        }
     }
 
 }

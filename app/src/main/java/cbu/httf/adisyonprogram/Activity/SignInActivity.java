@@ -52,7 +52,7 @@ public class SignInActivity extends AppCompatActivity {
 
     public void login(String eMail,String password){
 
-        LoginRequest loginRequest = new LoginRequest();
+        LoginRequest loginRequest = new LoginRequest();     //login information
         loginRequest.seteMail(eMail);
         loginRequest.setPassword(password);
 
@@ -70,14 +70,14 @@ public class SignInActivity extends AppCompatActivity {
 
                    Toast.makeText(SignInActivity.this,"Welcome "+loginResponse.getResult().get("name"),Toast.LENGTH_SHORT).show();
 
-                   if(loginResponse.getResult().get("UserTypeName").equals("Root")||loginResponse.getResult().get("UserTypeName").equals("Administrator")) { //Yönlendirme
+                   if(loginResponse.getResult().get("UserTypeName").equals("Root")||loginResponse.getResult().get("UserTypeName").equals("Administrator")) {
 
                        startActivity(new Intent(SignInActivity.this, AdminActivity.class).
                                putExtra("token", token).
                                putExtra("userName",loginResponse.getResult().get("userName")));
 
 
-                   }else if(loginResponse.getResult().get("UserTypeName").equals("Manager")) {
+                   }else if(loginResponse.getResult().get("UserTypeName").equals("Manager")) {      //Yönlendirme
 
                        startActivity(new Intent(SignInActivity.this,TablesActivity.class).
                                putExtra("token",token).

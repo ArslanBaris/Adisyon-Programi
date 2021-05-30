@@ -142,24 +142,28 @@ public class UserTransactActivity extends AppCompatActivity {
     }
 
     public void UserDelete(View v){
-        Call<ResultModel> userDeleteCall = Service.getServiceApi().deleteUser(takentoken,userId);
-        userDeleteCall.enqueue(new Callback<ResultModel>() {
-            @Override
-            public void onResponse(Call<ResultModel> call, Response<ResultModel> response) {
-                if(response.isSuccessful()){
-                    Toast.makeText(UserTransactActivity.this,"Transaction is successful.", Toast.LENGTH_LONG).show();
-                    sendOnChannel1();
-                    recreate();
-                }else{
-                    Toast.makeText(UserTransactActivity.this, "Request failed. "+response.code() , Toast.LENGTH_LONG).show();
+        if(userId==0)        //if not selected, cannot delete
+            Toast.makeText(UserTransactActivity.this,"Choose user", Toast.LENGTH_LONG).show();
+        else {
+            Call<ResultModel> userDeleteCall = Service.getServiceApi().deleteUser(takentoken, userId);
+            userDeleteCall.enqueue(new Callback<ResultModel>() {
+                @Override
+                public void onResponse(Call<ResultModel> call, Response<ResultModel> response) {
+                    if (response.isSuccessful()) {
+                        Toast.makeText(UserTransactActivity.this, "Transaction is successful.", Toast.LENGTH_LONG).show();
+                        sendOnChannel1();
+                        recreate();
+                    } else {
+                        Toast.makeText(UserTransactActivity.this, "Request failed. " + response.code(), Toast.LENGTH_LONG).show();
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<ResultModel> call, Throwable t) {
-                Toast.makeText(UserTransactActivity.this, "Request failed. "+t.getMessage() , Toast.LENGTH_LONG).show();
-            }
-        });
+                @Override
+                public void onFailure(Call<ResultModel> call, Throwable t) {
+                    Toast.makeText(UserTransactActivity.this, "Request failed. " + t.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            });
+        }
     }
 
 

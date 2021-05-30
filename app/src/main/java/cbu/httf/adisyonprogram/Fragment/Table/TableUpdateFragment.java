@@ -78,8 +78,11 @@ public class TableUpdateFragment extends BottomSheetDialogFragment {
         editTextTableNumber=(EditText)view.findViewById(R.id.editTextUpdateTableNumber);
         notificationManager = NotificationManagerCompat.from(getContext());
 
-        if(tableId!=0)
+        if(tableId!=0){
             editTextTableId.setText(String.valueOf(tableId));
+            editTextTableName.setText(tableName);
+            editTextTableNumber.setText(String.valueOf(tableNumber));
+        }
 
         imgClose = view.findViewById(R.id.update_table_imgClose);
 

@@ -129,11 +129,11 @@ public class SignUpActivity extends AppCompatActivity {
                             }
                         });
                         }else{
-                        Toast.makeText(SignUpActivity.this, "Those passwords didn’t match.",Toast.LENGTH_LONG).show();
+                        Toast.makeText(SignUpActivity.this, "Those passwords didn’t match",Toast.LENGTH_LONG).show();
                         }
 
                 }else {
-                    Toast.makeText(SignUpActivity.this, "Boş alanları doldurunuz.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(SignUpActivity.this, "Fill in the blanks", Toast.LENGTH_LONG).show();
                 }
             }
         });
