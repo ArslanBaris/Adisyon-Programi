@@ -57,6 +57,12 @@ public class MenuTransactActivity extends AppCompatActivity {
     static ArrayList<Integer> categories;
 
     private void init(){
+
+        Intent takenIntent = getIntent();
+        takenUserName = takenIntent.getStringExtra("userName");
+        takentoken=takenIntent.getStringExtra("token");
+
+        getSupportActionBar().setTitle("Menu Transact");
         getSupportActionBar().setIcon(R.drawable.ic_menu_transact);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
@@ -64,9 +70,9 @@ public class MenuTransactActivity extends AppCompatActivity {
         btnUpdateMenu=findViewById(R.id.btnMenuUpdate);
         btnDeleteMenu=findViewById(R.id.btnMenuDelete);
         notificationManager = NotificationManagerCompat.from(this);
-        categories=new ArrayList<>();
+        categories=new ArrayList<>();   // for categori IDs
 
-        categoryUpdateFragment =  new CategoryUpdateFragment(takentoken,categoryId,categoryName);
+        categoryUpdateFragment =  new CategoryUpdateFragment(takentoken,categoryId,categoryName);   // If not item selected, default values are sent.
         recyclerViewCategory=(RecyclerView)findViewById(R.id.category_recyclerView);
         recyclerViewProduct=(RecyclerView)findViewById(R.id.product_recyclerView);
     }
@@ -75,12 +81,6 @@ public class MenuTransactActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_transact);
-
-        getSupportActionBar().setTitle("Menu Transact");
-
-        Intent takenIntent = getIntent();
-        takenUserName = takenIntent.getStringExtra("userName");
-        takentoken=takenIntent.getStringExtra("token");
 
         init();
 
@@ -92,29 +92,8 @@ public class MenuTransactActivity extends AppCompatActivity {
 
     }
 
-    public void initCategories(ArrayList<CategoryModel> categoryModels){
-        LinearLayoutManager linearLayoutManager= new LinearLayoutManager(getApplicationContext());
-        recyclerViewCategory.setLayoutManager(linearLayoutManager);
-        CategoryAdapter categoryAdapter = new CategoryAdapter(categoryModels,getApplicationContext());
-        recyclerViewCategory.setAdapter(categoryAdapter);
-
-        categoryAdapter.setOnItemClickListener(new CategoryAdapter.OnCategoryItemClickListener() {
-            @Override
-            public void onCategoryItemClick(CategoryModel categoryModel, int position) {
-                categoryId=categoryModel.getCategoryId();
-                categoryName=categoryModel.getCategoryName();
-                productId=0;
-                categoryUpdateFragment =  new CategoryUpdateFragment(takentoken,categoryId,categoryName);
-                menuAddFragment =  new MenuAddFragment(takentoken,categories,categoryId);
-                getProducts();
-            }
-        });
-    }
-
     public void getCategories(){
-
         Call<List<CategoryModel>> categoriesModelCall = Service.getServiceApi().getCategories(takentoken);
-
         categoriesModelCall.enqueue(new Callback<List<CategoryModel>>() {
             @Override
             public void onResponse(Call<List<CategoryModel>> call, Response<List<CategoryModel>> response) {
@@ -123,7 +102,7 @@ public class MenuTransactActivity extends AppCompatActivity {
                     categoriesModels =(ArrayList<CategoryModel>) response.body();
 
                     for(CategoryModel categoryModel: categoriesModels){
-                        categories.add(categoryModel.getCategoryId());
+                        categories.add(categoryModel.getCategoryId());     // Includes Categories IDs
                     }
 
                     initCategories(categoriesModels);
@@ -140,10 +119,27 @@ public class MenuTransactActivity extends AppCompatActivity {
         });
     }
 
+    public void initCategories(ArrayList<CategoryModel> categoryModels){
+        LinearLayoutManager linearLayoutManager= new LinearLayoutManager(getApplicationContext());
+        recyclerViewCategory.setLayoutManager(linearLayoutManager);
+        CategoryAdapter categoryAdapter = new CategoryAdapter(categoryModels,getApplicationContext());
+        recyclerViewCategory.setAdapter(categoryAdapter);
+
+        categoryAdapter.setOnItemClickListener(new CategoryAdapter.OnCategoryItemClickListener() {
+            @Override
+            public void onCategoryItemClick(CategoryModel categoryModel, int position) {    // Selected item informations
+                categoryId=categoryModel.getCategoryId();
+                categoryName=categoryModel.getCategoryName();
+                productId=0;
+                categoryUpdateFragment =  new CategoryUpdateFragment(takentoken,categoryId,categoryName);       // This informations sent
+                menuAddFragment =  new MenuAddFragment(takentoken,categories,categoryId);
+                getProducts();
+            }
+        });
+    }
+
     public void getProducts(){
-
         Call<List<MenuModel>> productsModelCall = Service.getServiceApi().getMenu(takentoken);
-
         productsModelCall.enqueue(new Callback<List<MenuModel>>() {
             @Override
             public void onResponse(Call<List<MenuModel>> call, Response<List<MenuModel>> response) {
@@ -153,8 +149,8 @@ public class MenuTransactActivity extends AppCompatActivity {
                     productsModelsBody =(ArrayList<MenuModel>) response.body();
                     for(MenuModel productsModel : productsModelsBody )
                     {
-                        if(productsModel.getKategori()==categoryId){
-                            productsModels.add(productsModel);
+                        if(productsModel.getKategori()==categoryId){    // if the item information clicked is equal to the product
+                            productsModels.add(productsModel);      // it is added to the list
                         }
                     }
 
@@ -179,12 +175,12 @@ public class MenuTransactActivity extends AppCompatActivity {
         ProductAdapter productAdapter = new ProductAdapter(productModels,getApplicationContext(),categoryId);
         recyclerViewProduct.setAdapter(productAdapter);
 
-        productAdapter.setOnItemClickListener(new ProductAdapter.OnProductItemClickListener() {
+        productAdapter.setOnItemClickListener(new ProductAdapter.OnProductItemClickListener() {     // Selected item informations
             @Override
             public void onProductItemClick(MenuModel menuModel, int position) {
                 productId= menuModel.getID();
                 productName=menuModel.getAd();
-                menuUpdateFragment =  new MenuUpdateFragment(takentoken,categories,categoryId,productId);
+                menuUpdateFragment =  new MenuUpdateFragment(takentoken,categories,categoryId,productId);       // This informations sent
 
             }
         });
@@ -199,7 +195,7 @@ public class MenuTransactActivity extends AppCompatActivity {
         categoryUpdateFragment.show(getSupportFragmentManager(),"UPDATE CATEGORY");
     }
 
-    public void sendOnChannel1Category() {
+    public void sendOnChannel1Category() {       // Create notification
         String title = "Deleted Category";
         String message = categoryId+" | "+categoryName;
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_1_ID)
@@ -212,7 +208,7 @@ public class MenuTransactActivity extends AppCompatActivity {
         notificationManager.notify(1,notification);
     }
 
-    public void CategoryDelete(View v){
+    public void CategoryDelete(View v){     // for delete the selected item
 
         Call<ResultModel> deleteCall = Service.getServiceApi().deleteCategory(takentoken,categoryId);
         deleteCall.enqueue(new Callback<ResultModel>() {
@@ -258,7 +254,7 @@ public class MenuTransactActivity extends AppCompatActivity {
         notificationManager.notify(1,notification);
     }
 
-    public void MenuDelete(View v){
+    public void MenuDelete(View v){     // for delete the selected item
 
         Call<ResultModel> deleteCall = Service.getServiceApi().deleteMenu(takentoken,productId);
         deleteCall.enqueue(new Callback<ResultModel>() {
