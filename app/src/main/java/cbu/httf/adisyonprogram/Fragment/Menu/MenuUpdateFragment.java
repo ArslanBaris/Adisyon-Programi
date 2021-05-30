@@ -69,7 +69,7 @@ public class MenuUpdateFragment extends BottomSheetDialogFragment {
         String title = "Updated Product";
         String message = String.valueOf(productId)+" | "+ productName;
         Notification notification = new NotificationCompat.Builder(getContext(), CHANNEL_1_ID)
-                .setSmallIcon(R.drawable.ic_product)
+                .setSmallIcon(R.drawable.ic_product_2)
                 .setContentTitle(title)
                 .setContentText(message)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
