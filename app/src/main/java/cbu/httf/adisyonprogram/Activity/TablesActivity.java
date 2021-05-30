@@ -78,9 +78,9 @@ public class TablesActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 startActivity(new Intent(TablesActivity.this,TableItemActivity.class).
                         putExtra("token",takentoken).
-                        putExtra("tableId",tablesModel.get(position).getID()).
+                        putExtra("tableId",String.valueOf(tablesModel.get(position).getID())).
                         putExtra("tableName",tablesModel.get(position).getAd()).
-                        putExtra("tableNumber",tablesModel.get(position).getTableNo()));
+                        putExtra("tableNumber",String.valueOf(tablesModel.get(position).getTableNo())));
             }
         });
     }
