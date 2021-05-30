@@ -7,6 +7,14 @@
     tools:context=".Activity.SignInActivity"
     android:orientation="vertical">
 
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="80dp"
+        app:srcCompat="@drawable/ic_logo" />
+
     <EditText
         android:id="@+id/editTextLoginEmail"
         android:layout_width="250dp"
@@ -14,7 +22,7 @@
         android:ems="10"
         android:hint="Email"
         android:inputType="textPersonName"
-        android:layout_marginTop="180dp"
+        android:layout_marginTop="80dp"
         android:textAlignment="center"
         android:layout_gravity="center"
         tools:layout_editor_absoluteX="101dp"
@@ -40,16 +48,16 @@
         android:layout_gravity="center"
         android:layout_marginTop="50dp"
         android:onClick="btnSignIn"
-        android:text="Sign In"
-        tools:layout_editor_absoluteX="159dp"
-        tools:layout_editor_absoluteY="433dp" />
+        android:text="Sign In" />
 
-    <TextView
-        android:id="@+id/textView3"
+    <View
+        android:layout_width="300dp"
+        android:layout_marginTop="15dp"
+        android:layout_height="1dp"
         android:layout_gravity="center"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="___________________________________________" />
+        android:background="@android:color/black" />
+
+
 
 
 </LinearLayout>

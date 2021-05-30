@@ -8,8 +8,10 @@
         android:id="@+id/productImage"
         android:layout_width="35dp"
         android:layout_height="35dp"
+        android:layout_marginStart="3dp"
         android:layout_centerVertical="true"
-        app:srcCompat="@drawable/ic_product_1" />
+        app:srcCompat="@drawable/ic_product_1"
+        android:layout_marginLeft="3dp" />
 
     <TextView
         android:id="@+id/product_item_txtName"
