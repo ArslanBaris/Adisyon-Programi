@@ -43,6 +43,7 @@ public class TablesMenuAdapter extends ArrayAdapter<TablesModel> {
             imageView=view.findViewById(R.id.table_menu_image);
             txtName=view.findViewById(R.id.txt_menu_tableName);
             txtNumber=view.findViewById(R.id.txt_menu_tableNumber);
+
             txtName.setText(mTableList.get(position).getAd());
             txtNumber.setText(String.valueOf(mTableList.get(position).getTableNo()));
             //imageView.setBackgroundResource(R.drawable.ic_table);

@@ -17,7 +17,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:textColor="@color/black"
-                android:layout_marginTop="70dp"
+                android:layout_marginTop="80dp"
                 android:textSize="20sp"
                 android:fontFamily="serif"
                 android:textStyle="bold|italic"
@@ -40,7 +40,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="140dp"
+                android:layout_marginTop="150dp"
                 android:layout_marginRight="20dp"
                 android:ems="10"
                 android:hint="ID"
@@ -150,7 +150,7 @@
                 android:layout_marginLeft="30dp"
                 android:layout_marginTop="34dp"
                 android:layout_marginRight="30dp"
-                android:layout_marginBottom="100dp"
+                android:layout_marginBottom="150dp"
                 android:text="Save" />
         </RelativeLayout>
     </ScrollView>

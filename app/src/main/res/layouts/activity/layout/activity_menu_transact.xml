@@ -56,9 +56,9 @@
 
     <Button
         android:id="@+id/btnCategoryDelete"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="25dp"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="27dp"
         android:layout_marginRight="10dp"
         android:layout_toStartOf="@+id/product_recyclerView"
         android:background="@drawable/ic_delete"
@@ -92,13 +92,13 @@
 
     <Button
         android:id="@+id/btnMenuDelete"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_marginRight="5dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="27dp"
         android:layout_marginEnd="10dp"
         android:background="@drawable/ic_delete"
         android:onClick="MenuDelete"
