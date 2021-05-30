@@ -85,14 +85,8 @@ public class SignInActivity extends AppCompatActivity {
 
                    }else if(loginResponse.getResult().get("UserTypeName").equals("Manager")) {
 
-<<<<<<< HEAD
-                   }else if(loginResponse.getResult().get("UserTypeName").equals("Manager")) {
-                       Toast.makeText(SignInActivity.this,"Main Activity",Toast.LENGTH_LONG).show();
-                       startActivity(new Intent(SignInActivity.this,TableItemActivity.class).putExtra("token",token).
-=======
                        startActivity(new Intent(SignInActivity.this,TablesActivity.class).
                                putExtra("token",token).
->>>>>>> 31279f25f84f0d8126a845bd21ef790b4bcb26a8
                                putExtra("userName",loginResponse.getResult().get("userName")));
                    }
                }else{

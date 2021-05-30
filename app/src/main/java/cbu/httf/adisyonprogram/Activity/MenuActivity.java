@@ -27,6 +27,7 @@ import cbu.httf.adisyonprogram.data.model.Item;
 import cbu.httf.adisyonprogram.data.model.MenuModel;
 import cbu.httf.adisyonprogram.data.model.OrderList;
 import cbu.httf.adisyonprogram.data.model.OrderModel;
+import cbu.httf.adisyonprogram.data.model.ResultModel;
 import kotlin.time.FormatToDecimalsKt;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -38,8 +39,9 @@ public class MenuActivity extends AppCompatActivity {
     RecyclerView rcv2;
     List<OrderList> ItemAdapter_list = new ArrayList<>();
     ItemListAdapter adapter_itemList;
-    public int Table_ID=0;
+    public int Table_ID;
     public static String takentoken;
+    public String name,number;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +49,9 @@ public class MenuActivity extends AppCompatActivity {
         layout = findViewById(R.id.category);
         Intent takenIntent = getIntent();
         takentoken=takenIntent.getStringExtra("token");
+        name=takenIntent.getStringExtra("tableName");
+        number=takenIntent.getStringExtra("tableNumber");
+        Table_ID = Integer.parseInt(takenIntent.getStringExtra("masaId"));
         getCategories();
 
 
@@ -131,10 +136,36 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     public void btnOkClick(View view) {
-        this.finish();
+        startActivity(new Intent(MenuActivity.this,TableItemActivity.class).
+                putExtra("token",takentoken).
+                putExtra("tableId",String.valueOf(Table_ID)).
+                putExtra("tableName",name).
+                putExtra("tableNumber",number));
         List<OrderModel> orderModels_list = new ArrayList<>();
         for (OrderList Item : ItemAdapter_list) {
             orderModels_list.add(new OrderModel(Item.getTable_ID(),Integer.valueOf(Item.getItem_Piece()),Item.getItem_ID()));
+        }
+        postOrder(orderModels_list);
+    }
+
+    public void postOrder(List<OrderModel> orderModelList){
+
+        for (OrderModel item : orderModelList) {
+            Call<ResultModel> postOrderCall = Service.getServiceApi().postOrder(takentoken,item.getMasaID(),item.getUrun_Adet(),item.getMenuID());
+            postOrderCall.enqueue(new Callback<ResultModel>() {
+                @Override
+                public void onResponse(Call<ResultModel> call, Response<ResultModel> response) {
+                if(response.isSuccessful())
+                    Toast.makeText(MenuActivity.this, "Request success. "+response.code() , Toast.LENGTH_LONG).show();
+                else
+                    Toast.makeText(MenuActivity.this, "Request failed. "+response.code() , Toast.LENGTH_LONG).show();
+                }
+
+                @Override
+                public void onFailure(Call<ResultModel> call, Throwable t) {
+
+                }
+            });
         }
     }
 
