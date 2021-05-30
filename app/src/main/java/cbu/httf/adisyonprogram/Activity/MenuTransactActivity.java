@@ -63,7 +63,7 @@ public class MenuTransactActivity extends AppCompatActivity {
         notificationManager = NotificationManagerCompat.from(this);
         categories=new ArrayList<>();
 
-        categoryUpdateFragment =  new CategoryUpdateFragment(takentoken,categoryId);
+        categoryUpdateFragment =  new CategoryUpdateFragment(takentoken,categoryId,categoryName);
         recyclerViewCategory=(RecyclerView)findViewById(R.id.category_recyclerView);
         recyclerViewProduct=(RecyclerView)findViewById(R.id.product_recyclerView);
     }
@@ -84,13 +84,12 @@ public class MenuTransactActivity extends AppCompatActivity {
         getCategories();
 
         menuAddFragment =  new MenuAddFragment(takentoken,categories,categoryId);
-        menuUpdateFragment =  new MenuUpdateFragment(takentoken,categories,productId,categoryId);
+        menuUpdateFragment =  new MenuUpdateFragment(takentoken,categories,categoryId,productId);
         categoryAddFragment =  new CategoryAddFragment(takentoken);
 
     }
 
     public void initCategories(ArrayList<CategoryModel> categoryModels){
-        int value=0;
         LinearLayoutManager linearLayoutManager= new LinearLayoutManager(getApplicationContext());
         recyclerViewCategory.setLayoutManager(linearLayoutManager);
         CategoryAdapter categoryAdapter = new CategoryAdapter(categoryModels,getApplicationContext());
@@ -101,7 +100,8 @@ public class MenuTransactActivity extends AppCompatActivity {
             public void onCategoryItemClick(CategoryModel categoryModel, int position) {
                 categoryId=categoryModel.getCategoryId();
                 categoryName=categoryModel.getCategoryName();
-                categoryUpdateFragment =  new CategoryUpdateFragment(takentoken,categoryId);
+                productId=0;
+                categoryUpdateFragment =  new CategoryUpdateFragment(takentoken,categoryId,categoryName);
                 menuAddFragment =  new MenuAddFragment(takentoken,categories,categoryId);
                 getProducts();
             }
@@ -179,9 +179,9 @@ public class MenuTransactActivity extends AppCompatActivity {
         productAdapter.setOnItemClickListener(new ProductAdapter.OnProductItemClickListener() {
             @Override
             public void onProductItemClick(MenuModel menuModel, int position) {
-                productId=menuModel.getID();
+                productId= menuModel.getID();
                 productName=menuModel.getAd();
-                menuUpdateFragment =  new MenuUpdateFragment(takentoken,categories,productId,categoryId);
+                menuUpdateFragment =  new MenuUpdateFragment(takentoken,categories,categoryId,productId);
 
             }
         });
@@ -236,7 +236,10 @@ public class MenuTransactActivity extends AppCompatActivity {
     }
 
     public void FragmentMenuUpdate(View v){
-        menuUpdateFragment.show(getSupportFragmentManager(),"UPDATE MENU");
+        if(productId==0)
+            Toast.makeText(MenuTransactActivity.this,"Choose product", Toast.LENGTH_LONG).show();
+        else
+            menuUpdateFragment.show(getSupportFragmentManager(),"UPDATE MENU");
     }
 
     public void sendOnChannel1Product() {
