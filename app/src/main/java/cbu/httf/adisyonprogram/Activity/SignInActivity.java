@@ -31,18 +31,21 @@ public class SignInActivity extends AppCompatActivity {
     private String eMail;
     private String password;
     private  static  String token;
+
+    public void init(){
+        getSupportActionBar().setTitle("Sign In");  //ActionBar Text
+        getSupportActionBar().setIcon(R.drawable.login);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        editTextLoginEmail=(EditText)findViewById(R.id.editTextLoginEmail);
+        editTextLoginPassword=(EditText)findViewById(R.id.editTextLoginPassword);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
 
-        getSupportActionBar().setTitle("Sign In");
-
-
-        editTextLoginEmail=(EditText)findViewById(R.id.editTextLoginEmail);
-        editTextLoginPassword=(EditText)findViewById(R.id.editTextLoginPassword);
-
-
+        init();
     }
 
     public void btnSignIn(View v){
@@ -73,10 +76,13 @@ public class SignInActivity extends AppCompatActivity {
 
                    Toast.makeText(SignInActivity.this,"Welcome "+loginResponse.getResult().get("name"),Toast.LENGTH_SHORT).show();
 
-                   if(loginResponse.getResult().get("UserTypeName").equals("Root")||loginResponse.getResult().get("UserTypeName").equals("Administrator")){
+                   if(loginResponse.getResult().get("UserTypeName").equals("Root")||loginResponse.getResult().get("UserTypeName").equals("Administrator")) { //Yönlendirme
 
-                       startActivity(new Intent(SignInActivity.this,AdminActivity.class).putExtra("token",token).
+                       startActivity(new Intent(SignInActivity.this, AdminActivity.class).
+                               putExtra("token", token).
                                putExtra("userName",loginResponse.getResult().get("userName")));
+
+
                    }else if(loginResponse.getResult().get("UserTypeName").equals("Manager")) {
 
                        startActivity(new Intent(SignInActivity.this,TablesActivity.class).

@@ -33,18 +33,28 @@ public class UserTransactActivity extends AppCompatActivity {
 
     private UserUpdateFragment userUpdateFragment;
 
-    private RecyclerView recyclerView;
     public   static String takentoken;
     public   String takenUserName;
     public  int userId=0;
-    public String name,surname;
+    public String userName;
+    public String name;
+    public String surname;
+    public String eMail;
+    public String userTypeName;
+    private RecyclerView recyclerView;
     private NotificationManagerCompat notificationManager;
+
+
     private void init(){
+        getSupportActionBar().setTitle("User Transact");
+        getSupportActionBar().setIcon(R.drawable.ic_users);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
         btnAddUser=(Button)findViewById(R.id.btnUserAdd);
         btnUpdateUser=(Button)findViewById(R.id.btnUserUpdate);
         btnDeleteUser=(Button)findViewById(R.id.btnUserDelete);
         notificationManager = NotificationManagerCompat.from(this);
-        userUpdateFragment =  new UserUpdateFragment(takentoken,userId);
+        userUpdateFragment =  new UserUpdateFragment(takentoken,userId,userName,name,surname,eMail,userTypeName);
 
         recyclerView=(RecyclerView)findViewById(R.id.user_recyclerView);
     }
@@ -54,7 +64,6 @@ public class UserTransactActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_transact);
-        getSupportActionBar().setTitle("User Transact");
 
         Intent takenIntent = getIntent();
         takenUserName = takenIntent.getStringExtra("userName");
@@ -77,9 +86,12 @@ public class UserTransactActivity extends AppCompatActivity {
             @Override
             public void onUserItemClick(UserModel userModel, int position) {
                 userId=userModel.getID();
+                userName=userModel.getUserName();
                 name=userModel.getName();
                 surname=userModel.getSurname();
-                userUpdateFragment =  new UserUpdateFragment(takentoken,userId);
+                eMail=userModel.geteMail();
+                userTypeName=userModel.getUserTypeName();
+                userUpdateFragment =  new UserUpdateFragment(takentoken,userId,userName,name,surname,eMail,userTypeName);
             }
         });
     }

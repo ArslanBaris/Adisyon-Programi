@@ -13,15 +13,12 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 public class Service {
 
     public static ServiceApi serviceApi;
-    //public static Gson gson = new GsonBuilder().setLenient().create();
-
     public  static Retrofit retrofit;
 
     private static Retrofit getInstance() {
         if (retrofit == null) {
             retrofit = new Retrofit.Builder()
                     .baseUrl(Cons.BASE_URL)
-                    //.addConverterFactory(ScalarsConverterFactory.create())
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
         }

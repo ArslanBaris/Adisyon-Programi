@@ -31,6 +31,9 @@ public class TablesActivity extends AppCompatActivity {
     private TablesMenuAdapter tablesMenuAdapter;
 
     private void init(){
+        getSupportActionBar().setTitle("Tables");  //ActionBar Text
+        getSupportActionBar().setIcon(R.drawable.ic_table_4);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
        gridView=(GridView)findViewById(R.id.tables_gridView);
 
     }

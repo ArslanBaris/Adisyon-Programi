@@ -53,9 +53,14 @@ public class UserUpdateFragment extends BottomSheetDialogFragment {
 
     private NotificationManagerCompat notificationManager;
 
-    public UserUpdateFragment(String token,int id) {
-        this.id=id;
-        this.token=token;
+    public UserUpdateFragment( String token,int id, String userName, String name, String surname, String eMail, String userTypeName) {
+        this.id = id;
+        this.userName = userName;
+        this.name = name;
+        this.surname = surname;
+        this.eMail = eMail;
+        this.userTypeName = userTypeName;
+        this.token = token;
     }
 
     @Nullable
@@ -91,8 +96,18 @@ public class UserUpdateFragment extends BottomSheetDialogFragment {
         rbUser=(RadioButton)view.findViewById(R.id.rbUpdateUser);
         notificationManager = NotificationManagerCompat.from(getContext());
 
-        if(id!=0)
+        if(id!=0 && userName!=null && name!=null && surname!=null &&eMail!=null &&userTypeName!=null){
             editTextId.setText(String.valueOf(id));
+            editTextUserName.setText(userName);
+            editTextName.setText(name);
+            editTextSurname.setText(surname);
+            editTextEmail.setText(eMail);
+            if (userTypeName.equals("Manager"))
+                rbUser.setChecked(true);
+            else
+                rbAdmin.setChecked(true);
+        }
+
 
         imgClose = view.findViewById(R.id.update_user_imgClose);
 
